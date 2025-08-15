@@ -1,69 +1,50 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
-import { Mail, CheckCircle } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Mail, CheckCircle } from "lucide-react";
 
 export function NewsletterSignup() {
-  const [email, setEmail] = useState("")
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email) return
+    e.preventDefault();
+    if (!email) return;
 
-    setIsLoading(true)
+    setIsLoading(true);
+    setError("");
 
-  const KIT_API_ENDPOINT = 'https://api.kit.com/v4/subscribers';
-  const KIT_API_SECRET = process.env.KIT_API_KEY;
-
-  if (!KIT_API_SECRET) {
-    console.error('KIT_API_SECRET is not set.');
-    return res
-      .status(500)
-      .json({ error: 'Server configuration error.' });
-  }
-
-  try {
-    const kitResponse = await fetch(KIT_API_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // Authenticate with your Kit API Secret
-        'X-Kit-Api-Key': `${KIT_API_SECRET}`,
-      },
-      body: JSON.stringify({
-        email_address: email,
-        state: "active",
-      }),
-    });
-
-    const kitData = await kitResponse.json();
-
-    if (kitResponse.ok) {
-      res.status(200).json({ message: 'Subscribed successfully!', data: kitData });
-    } else {
-      // Log the full error response from Kit for debugging
-      console.error('Kit API Error:', kitData);
-      res.status(kitResponse.status).json({
-        error: kitData.message || 'Failed to subscribe to Kit.',
-        details: kitData, // Provide details for frontend debugging
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
       });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setEmail("");
+      } else {
+        setError(data.error || "Failed to subscribe. Please try again.");
+      }
+    } catch (error) {
+      console.error("Newsletter signup error:", error);
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    console.error('API Route Error:', error);
-    res.status(500).json({ error: 'Internal server error.' });
-  } finally {
-setIsSubmitted(true)
-    setIsLoading(false)
-    setEmail("")
-    }    
-  }
+  };
 
   if (isSubmitted) {
     return (
@@ -72,11 +53,15 @@ setIsSubmitted(true)
           <div className="flex items-center justify-center mb-4">
             <CheckCircle className="h-12 w-12 text-[#6e2765]" />
           </div>
-          <h3 className="text-xl font-semibold text-[#6e2765] mb-2">Thank you for subscribing!</h3>
-          <p className="text-[#a87da3]">You'll receive updates and exclusive content in your inbox.</p>
+          <h3 className="text-xl font-semibold text-[#6e2765] mb-2">
+            Thank you for subscribing!
+          </h3>
+          <p className="text-[#a87da3]">
+            You'll receive updates and exclusive content in your inbox.
+          </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -86,9 +71,12 @@ setIsSubmitted(true)
           <div className="flex items-center justify-center mb-3">
             <Mail className="h-8 w-8 text-[#6e2765]" />
           </div>
-          <h3 className="text-xl font-semibold text-[#6e2765] mb-2">Stay Updated</h3>
+          <h3 className="text-xl font-semibold text-[#6e2765] mb-2">
+            Stay Updated
+          </h3>
           <p className="text-[#a87da3] text-sm">
-            Get the latest updates, insights, and exclusive content delivered to your inbox.
+            Get the latest updates, insights, and exclusive content delivered to
+            your inbox.
           </p>
         </div>
 
@@ -103,6 +91,8 @@ setIsSubmitted(true)
               required
             />
           </div>
+
+          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
 
           <Button
             type="submit"
@@ -120,8 +110,10 @@ setIsSubmitted(true)
           </Button>
         </form>
 
-        <p className="text-xs text-[#a87da3] text-center mt-4">No spam, unsubscribe at any time.</p>
+        <p className="text-xs text-[#a87da3] text-center mt-4">
+          No spam, unsubscribe at any time.
+        </p>
       </CardContent>
     </Card>
-  )
+  );
 }

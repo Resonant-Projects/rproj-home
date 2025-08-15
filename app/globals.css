@@ -4,6 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Font families */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
   /* Updated to use the provided brand color palette */
   --color-brand-50: #faf9fb;
   --color-brand-200: #e2d4e0;
