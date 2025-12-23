@@ -1,0 +1,99 @@
+<svg
+  width="512"
+  height="512"
+  viewBox="0 0 512 512"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title>Vedic Astro Made Easy</title>
+  <desc>Streamlined star icon with warm saffron gradient and three accent stars on a subtle geometric ring.</desc>
+
+  <defs>
+    <linearGradient id="warmFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF9ED" />
+      <stop offset="35%" stop-color="#F9E2AE" />
+      <stop offset="70%" stop-color="#E8C87A" />
+      <stop offset="100%" stop-color="#D4A853" />
+    </linearGradient>
+
+    <radialGradient id="starLuminous" cx="50%" cy="45%" r="55%" fx="50%" fy="45%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#FFFCF5" />
+      <stop offset="100%" stop-color="#F5E6C8" />
+    </radialGradient>
+
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="60%" stop-color="#8B7B3D" stop-opacity="0" />
+      <stop offset="100%" stop-color="#8B7B3D" stop-opacity="0.10" />
+    </radialGradient>
+
+    <clipPath id="roundedBg">
+      <rect x="40" y="40" width="432" height="432" rx="100" ry="100" />
+    </clipPath>
+  </defs>
+
+  <rect
+    x="40"
+    y="40"
+    width="432"
+    height="432"
+    rx="100"
+    ry="100"
+    fill="url(#warmFlow)"
+  />
+
+  <rect
+    x="40"
+    y="40"
+    width="432"
+    height="432"
+    rx="100"
+    ry="100"
+    fill="url(#vignette)"
+  />
+
+  <circle
+    cx="256"
+    cy="256"
+    r="145"
+    fill="none"
+    stroke="#C9A857"
+    stroke-width="1"
+    stroke-opacity="0.22"
+  />
+
+  <path
+    fill="url(#starLuminous)"
+    d="M256 105
+       C 272 165, 310 210, 395 230
+       C 310 250, 272 295, 256 407
+       C 240 295, 202 250, 117 230
+       C 202 210, 240 165, 256 105 Z"
+  />
+
+  <path
+    fill="#FFFEF8"
+    opacity="0.4"
+    d="M256 95
+       C 274 160, 315 208, 405 230
+       C 315 252, 274 300, 256 417
+       C 238 300, 197 252, 107 230
+       C 197 208, 238 160, 256 95 Z"
+  />
+
+  <path
+    fill="url(#starLuminous)"
+    d="M256 105
+       C 272 165, 310 210, 395 230
+       C 310 250, 272 295, 256 407
+       C 240 295, 202 250, 117 230
+       C 202 210, 240 165, 256 105 Z"
+  />
+
+  <g fill="#C9A857" fill-opacity="0.55">
+    <path d="M328.5 118.4 C 331.5 124.4, 335.5 128.4, 342.5 130.4 C 335.5 132.4, 331.5 136.4, 328.5 142.4 C 325.5 136.4, 321.5 132.4, 314.5 130.4 C 321.5 128.4, 325.5 124.4, 328.5 118.4 Z" />
+    <path d="M374.8 327.2 C 377.8 333.2, 381.8 337.2, 388.8 339.2 C 381.8 341.2, 377.8 345.2, 374.8 351.2 C 371.8 345.2, 367.8 341.2, 360.8 339.2 C 367.8 337.2, 371.8 333.2, 374.8 327.2 Z" />
+    <path d="M137.2 327.2 C 140.2 333.2, 144.2 337.2, 151.2 339.2 C 144.2 341.2, 140.2 345.2, 137.2 351.2 C 134.2 345.2, 130.2 341.2, 123.2 339.2 C 130.2 337.2, 134.2 333.2, 137.2 327.2 Z" />
+  </g>
+</svg>
