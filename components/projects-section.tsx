@@ -12,10 +12,11 @@ const projects = [
     repoUrl: "https://github.com/keithce/rproj-astrowind",
   },
   {
-    title: "Vedic Astro Made Easy",
+    title: "Vedic Today",
     description: "Portal for helpful notifications about Vedic Astrology Events impacting every day life.",
     techStack: ["SolidJS", "TypeScript", "Convex", "Resend", "Clerk"],
-    liveUrl: "https://astro.rproj.art",
+    liveUrl: "https://www.vedic.today",
+    icon: "/vame.svg",
   },
   {
     title: "License Monitor",
@@ -38,7 +39,10 @@ export function ProjectsSection() {
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <CardHeader className="pb-3">
-              <CardTitle className="text-card-foreground group-hover:text-primary transition-colors text-xl">
+              <CardTitle className="text-card-foreground group-hover:text-primary transition-colors text-xl flex items-center gap-2">
+                {project.icon && (
+                  <img src={project.icon} alt="" className="w-6 h-6 rounded" />
+                )}
                 {project.title}
               </CardTitle>
               <CardDescription className="text-muted-foreground">{project.description}</CardDescription>
