@@ -43,12 +43,10 @@ export function SocialLinksSection() {
               size="lg"
               className={`w-full justify-start text-left h-14 border-border bg-card hover:scale-[1.02] transition-all duration-300 animate-fade-in-up ${link.color}`}
               style={{ animationDelay: `${index * 0.1}s` }}
-              asChild
+              render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}
             >
-              <a href={link.url} target="_blank" rel="noopener noreferrer">
-                <IconComponent className="w-5 h-5 mr-4" />
-                <span className="font-medium">{link.name}</span>
-              </a>
+              <IconComponent className="w-5 h-5 mr-4" />
+              <span className="font-medium">{link.name}</span>
             </Button>
           )
         })}
