@@ -8,8 +8,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github } from "lucide-react";
+import { ProjectsAccordion, type Project } from "@/components/projects-accordion";
 
-const projects = [
+const featuredProjects: Project[] = [
   {
     title: "Resonant Projects .ART",
     description:
@@ -35,6 +36,23 @@ const projects = [
   },
 ];
 
+const moreProjects: Project[] = [
+  {
+    title: "Declination Living",
+    description: "Astronomy/astrology app with 3D globe visualizations",
+    techStack: ["React", "Vite", "Convex", "Three.js", "Framer Motion"],
+    liveUrl: "https://living.rproj.art",
+    repoUrl: "https://github.com/keithce/declination-living",
+  },
+  {
+    title: "Pick A Park",
+    description: "Random park selector to alleviate decision fatigue",
+    techStack: ["React", "Vite", "Convex", "Clerk", "TanStack"],
+    liveUrl: "https://parks.rproj.art",
+    repoUrl: "https://github.com/Resonant-Projects/park-chooser",
+  },
+];
+
 export function ProjectsSection() {
   return (
     <section className="space-y-6">
@@ -43,7 +61,7 @@ export function ProjectsSection() {
       </h2>
 
       <div className="grid gap-4">
-        {projects.map((project, index) => (
+        {featuredProjects.map((project, index) => (
           <Card
             key={project.title}
             className="group hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-border bg-card animate-fade-in-up"
@@ -114,6 +132,8 @@ export function ProjectsSection() {
           </Card>
         ))}
       </div>
+
+      <ProjectsAccordion projects={moreProjects} />
     </section>
   );
 }
