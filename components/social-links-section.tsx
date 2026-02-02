@@ -45,8 +45,8 @@ export function SocialLinksSection() {
               style={{ animationDelay: `${index * 0.1}s` }}
               render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}
             >
-                <IconComponent className="w-5 h-5 mr-4" />
-                <span className="font-medium">{link.name}</span>
+              <IconComponent className="w-5 h-5 mr-4" />
+              <span className="font-medium">{link.name}</span>
             </Button>
           )
         })}

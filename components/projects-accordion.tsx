@@ -146,16 +146,16 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                           <Button
                             size="sm"
                             className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
-                            asChild
+                            render={
+                              <a
+                                href={project.liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              />
+                            }
                           >
-                            <a
-                              href={project.liveUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <ExternalLink className="w-4 h-4 mr-2" />
-                              Visit
-                            </a>
+                            <ExternalLink className="w-4 h-4 mr-2" />
+                            Visit
                           </Button>
                         )}
 
@@ -164,16 +164,16 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                             size="sm"
                             variant="outline"
                             className="flex-1 border-border hover:bg-accent hover:text-accent-foreground bg-transparent"
-                            asChild
+                            render={
+                              <a
+                                href={project.repoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              />
+                            }
                           >
-                            <a
-                              href={project.repoUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <Github className="w-4 h-4 mr-2" />
-                              Code
-                            </a>
+                            <Github className="w-4 h-4 mr-2" />
+                            Code
                           </Button>
                         )}
                       </div>
