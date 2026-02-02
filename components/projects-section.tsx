@@ -102,6 +102,7 @@ export function ProjectsSection() {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={`Visit ${project.title}`}
                       />
                     }
                   >
@@ -120,6 +121,7 @@ export function ProjectsSection() {
                         href={project.repoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={`View code for ${project.title}`}
                       />
                     }
                   >

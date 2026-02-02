@@ -73,7 +73,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const shouldReduceMotion = useReducedMotion()
 
-  const toggleExpanded = () => setIsExpanded(!isExpanded)
+  const toggleExpanded = () => setIsExpanded(prev => !prev)
 
   return (
     <div className="mt-6">
@@ -151,6 +151,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                                 href={project.liveUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                aria-label={`Visit ${project.title}`}
                               />
                             }
                           >
@@ -169,6 +170,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                                 href={project.repoUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                aria-label={`View code for ${project.title}`}
                               />
                             }
                           >
