@@ -1,36 +1,38 @@
+"use client";
+
 import { Button } from "@/components/ui/button"
-import { Github, Linkedin, Twitter, Mail, Globe } from "lucide-react"
+import { GithubLogo, LinkedinLogo, XLogo, EnvelopeSimple } from "@phosphor-icons/react"
 
 const socialLinks = [
   {
     name: "GitHub",
     url: "https://github.com/keithce",
-    icon: Github,
+    icon: GithubLogo,
     color: "hover:bg-gray-900 hover:text-white",
   },
   {
     name: "LinkedIn",
     url: "https://linkedin.com/in/keithcelliott",
-    icon: Linkedin,
+    icon: LinkedinLogo,
     color: "hover:bg-blue-600 hover:text-white",
   },
   {
     name: "Twitter",
     url: "https://twitter.com/keithce",
-    icon: Twitter,
+    icon: XLogo,
     color: "hover:bg-sky-500 hover:text-white",
   },
   {
     name: "Email",
     url: "mailto:info@resonantprojects.art",
-    icon: Mail,
+    icon: EnvelopeSimple,
     color: "hover:bg-red-500 hover:text-white",
   },
 ]
 
 export function SocialLinksSection() {
   return (
-    <section className="space-y-6">
+    <section id="connect" className="space-y-6">
       <h2 className="text-2xl font-semibold text-center text-foreground">Connect With Me</h2>
 
       <div className="grid gap-3">

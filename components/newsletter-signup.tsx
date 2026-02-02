@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mail, CheckCircle } from "lucide-react";
+import { EnvelopeSimple, CheckCircle } from "@phosphor-icons/react";
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -48,7 +48,8 @@ export function NewsletterSignup() {
 
   if (isSubmitted) {
     return (
-      <Card className="bg-gradient-to-br from-[#faf9fb] to-[#f3f1f5] border-[#e5d9e3] shadow-lg">
+      <section id="newsletter">
+        <Card className="bg-gradient-to-br from-[#faf9fb] to-[#f3f1f5] border-[#e5d9e3] shadow-lg">
         <CardContent className="p-6 text-center">
           <div className="flex items-center justify-center mb-4">
             <CheckCircle className="h-12 w-12 text-[#6e2765]" />
@@ -61,19 +62,22 @@ export function NewsletterSignup() {
           </p>
         </CardContent>
       </Card>
+      </section>
     );
   }
 
   return (
-    <Card className="bg-gradient-to-br from-[#faf9fb] to-[#f3f1f5] border-[#e5d9e3] shadow-lg hover:shadow-xl transition-all duration-300">
-      <CardContent className="p-6">
-        <div className="text-center mb-6">
-          <div className="flex items-center justify-center mb-3">
-            <Mail className="h-8 w-8 text-[#6e2765]" />
-          </div>
-          <h3 className="text-xl font-semibold text-[#6e2765] mb-2">
-            Stay Updated
-          </h3>
+    <section id="newsletter">
+      <h2 className="sr-only">Newsletter Signup</h2>
+      <Card className="bg-gradient-to-br from-[#faf9fb] to-[#f3f1f5] border-[#e5d9e3] shadow-lg hover:shadow-xl transition-all duration-300">
+        <CardContent className="p-6">
+          <div className="text-center mb-6">
+            <div className="flex items-center justify-center mb-3">
+              <EnvelopeSimple className="h-8 w-8 text-[#6e2765]" />
+            </div>
+            <h3 className="text-xl font-semibold text-[#6e2765] mb-2">
+              Stay Updated
+            </h3>
           <p className="text-[#a87da3] text-sm">
             Get the latest updates, insights, and exclusive content delivered to
             your inbox.
@@ -111,9 +115,10 @@ export function NewsletterSignup() {
         </form>
 
         <p className="text-xs text-[#a87da3] text-center mt-4">
-          No spam, unsubscribe at any time.
-        </p>
-      </CardContent>
-    </Card>
+            No spam, unsubscribe at any time.
+          </p>
+        </CardContent>
+      </Card>
+    </section>
   );
 }
