@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Github, ChevronDown } from "lucide-react"
+import { ArrowSquareOut, GithubLogo, CaretDown } from "@phosphor-icons/react"
 
 export interface Project {
   title: string
@@ -90,7 +90,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
           transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, ease: "easeInOut" }}
           className="ml-2"
         >
-          <ChevronDown className="w-4 h-4" />
+          <CaretDown className="w-4 h-4" />
         </motion.span>
       </Button>
 
@@ -155,7 +155,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                               />
                             }
                           >
-                            <ExternalLink className="w-4 h-4 mr-2" />
+                            <ArrowSquareOut className="w-4 h-4 mr-2" />
                             Visit
                           </Button>
                         )}
@@ -174,7 +174,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                               />
                             }
                           >
-                            <Github className="w-4 h-4 mr-2" />
+                            <GithubLogo className="w-4 h-4 mr-2" />
                             Code
                           </Button>
                         )}
