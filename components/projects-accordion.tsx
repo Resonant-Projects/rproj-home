@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Github, ChevronDown } from "lucide-react"
+import { ArrowSquareOut, CaretDown, GithubLogo } from "@phosphor-icons/react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export interface Project {
-  title: string
-  description: string
-  techStack: string[]
-  liveUrl?: string
-  repoUrl?: string
-  icon?: string
+  title: string;
+  description: string;
+  techStack: string[];
+  liveUrl?: string;
+  repoUrl?: string;
+  icon?: string;
 }
 
 interface ProjectsAccordionProps {
-  projects: Project[]
+  projects: Project[];
 }
 
 const contentVariants = {
@@ -53,7 +53,7 @@ const contentVariants = {
       },
     },
   },
-}
+};
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -67,13 +67,13 @@ const cardVariants = {
       damping: 24,
     },
   }),
-}
+};
 
 export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const shouldReduceMotion = useReducedMotion()
+  const [isExpanded, setIsExpanded] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
-  const toggleExpanded = () => setIsExpanded(prev => !prev)
+  const toggleExpanded = () => setIsExpanded((prev) => !prev);
 
   return (
     <div className="mt-6">
@@ -90,7 +90,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
           transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, ease: "easeInOut" }}
           className="ml-2"
         >
-          <ChevronDown className="w-4 h-4" />
+          <CaretDown className="w-4 h-4" />
         </motion.span>
       </Button>
 
@@ -155,7 +155,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                               />
                             }
                           >
-                            <ExternalLink className="w-4 h-4 mr-2" />
+                            <ArrowSquareOut className="w-4 h-4 mr-2" />
                             Visit
                           </Button>
                         )}
@@ -174,7 +174,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                               />
                             }
                           >
-                            <Github className="w-4 h-4 mr-2" />
+                            <GithubLogo className="w-4 h-4 mr-2" />
                             Code
                           </Button>
                         )}
@@ -188,5 +188,5 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }

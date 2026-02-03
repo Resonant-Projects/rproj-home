@@ -1,12 +1,11 @@
 "use client";
 
+import { CheckCircle, EnvelopeSimple } from "@phosphor-icons/react";
 import type React from "react";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { EnvelopeSimple, CheckCircle } from "@phosphor-icons/react";
+import { Input } from "@/components/ui/input";
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -49,19 +48,19 @@ export function NewsletterSignup() {
   if (isSubmitted) {
     return (
       <section id="newsletter">
-        <Card className="bg-gradient-to-br from-[#faf9fb] to-[#f3f1f5] border-[#e5d9e3] shadow-lg">
-        <CardContent className="p-6 text-center">
-          <div className="flex items-center justify-center mb-4">
-            <CheckCircle className="h-12 w-12 text-[#6e2765]" />
-          </div>
-          <h3 className="text-xl font-semibold text-[#6e2765] mb-2">
-            Thank you for subscribing!
-          </h3>
-          <p className="text-[#a87da3]">
-            You'll receive updates and exclusive content in your inbox.
-          </p>
-        </CardContent>
-      </Card>
+        <Card className="bg-gradient-to-br from-brand-50 to-brand-50 border-brand-200 shadow-lg">
+          <CardContent className="p-6 text-center">
+            <div className="flex items-center justify-center mb-4">
+              <CheckCircle className="h-12 w-12 text-brand-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-brand-600 mb-2">
+              Thank you for subscribing!
+            </h3>
+            <p className="text-brand-400">
+              You'll receive updates and exclusive content in your inbox.
+            </p>
+          </CardContent>
+        </Card>
       </section>
     );
   }
@@ -69,52 +68,49 @@ export function NewsletterSignup() {
   return (
     <section id="newsletter">
       <h2 className="sr-only">Newsletter Signup</h2>
-      <Card className="bg-gradient-to-br from-[#faf9fb] to-[#f3f1f5] border-[#e5d9e3] shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="bg-gradient-to-br from-brand-50 to-brand-50 border-brand-200 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardContent className="p-6">
           <div className="text-center mb-6">
             <div className="flex items-center justify-center mb-3">
-              <EnvelopeSimple className="h-8 w-8 text-[#6e2765]" />
+              <EnvelopeSimple className="h-8 w-8 text-brand-600" />
             </div>
-            <h3 className="text-xl font-semibold text-[#6e2765] mb-2">
-              Stay Updated
-            </h3>
-          <p className="text-[#a87da3] text-sm">
-            Get the latest updates, insights, and exclusive content delivered to
-            your inbox.
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="relative">
-            <Input
-              type="email"
-              placeholder="Enter your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-white border-[#e5d9e3] focus:border-[#6e2765] focus:ring-[#6e2765] text-[#6e2765] placeholder:text-[#a87da3]"
-              required
-            />
+            <h3 className="text-xl font-semibold text-brand-600 mb-2">Stay Updated</h3>
+            <p className="text-brand-400 text-sm">
+              Get the latest updates, insights, and exclusive content delivered to your inbox.
+            </p>
           </div>
 
-          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="relative">
+              <Input
+                type="email"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-white border-brand-200 focus:border-brand-600 focus:ring-brand-600 text-brand-600 placeholder:text-brand-400"
+                required
+              />
+            </div>
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-gradient-to-r from-[#6e2765] to-[#a87da3] hover:from-[#5a1f54] hover:to-[#956a90] text-white font-medium py-2.5 transition-all duration-300 transform hover:scale-[1.02]"
-          >
-            {isLoading ? (
-              <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Subscribing...
-              </div>
-            ) : (
-              "Subscribe to Newsletter"
-            )}
-          </Button>
-        </form>
+            {error && <p className="text-sm text-red-600 text-center">{error}</p>}
 
-        <p className="text-xs text-[#a87da3] text-center mt-4">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-brand-600 to-brand-400 hover:from-brand-600/90 hover:to-brand-400/90 text-white font-medium py-2.5 transition-all duration-300 transform hover:scale-[1.02]"
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Subscribing...
+                </div>
+              ) : (
+                "Subscribe to Newsletter"
+              )}
+            </Button>
+          </form>
+
+          <p className="text-xs text-brand-400 text-center mt-4">
             No spam, unsubscribe at any time.
           </p>
         </CardContent>
