@@ -73,7 +73,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
       return { cols, rows, squares, dpr };
     },
-    [squareSize, gridGap, maxOpacity]
+    [squareSize, gridGap, maxOpacity],
   );
 
   const updateSquares = useCallback(
@@ -84,7 +84,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
         }
       }
     },
-    [flickerChance, maxOpacity]
+    [flickerChance, maxOpacity],
   );
 
   const drawGrid = useCallback(
@@ -95,7 +95,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
       cols: number,
       rows: number,
       squares: Float32Array,
-      dpr: number
+      dpr: number,
     ) => {
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = "transparent";
@@ -109,12 +109,12 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
             i * (squareSize + gridGap) * dpr,
             j * (squareSize + gridGap) * dpr,
             squareSize * dpr,
-            squareSize * dpr
+            squareSize * dpr,
           );
         }
       }
     },
-    [memoizedColor, squareSize, gridGap]
+    [memoizedColor, squareSize, gridGap],
   );
 
   useEffect(() => {
@@ -152,7 +152,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
         gridParams.cols,
         gridParams.rows,
         gridParams.squares,
-        gridParams.dpr
+        gridParams.dpr,
       );
       animationFrameId = requestAnimationFrame(animate);
     };
@@ -167,7 +167,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0 }
+      { threshold: 0 },
     );
 
     intersectionObserver.observe(canvas);

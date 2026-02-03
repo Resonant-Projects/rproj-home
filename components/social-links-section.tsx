@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button"
-import { GithubLogo, LinkedinLogo, XLogo, EnvelopeSimple } from "@phosphor-icons/react"
+import { EnvelopeSimple, GithubLogo, LinkedinLogo, XLogo } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
 
 const socialLinks = [
   {
@@ -28,16 +28,16 @@ const socialLinks = [
     icon: EnvelopeSimple,
     color: "hover:bg-red-500 hover:text-white",
   },
-]
+];
 
 export function SocialLinksSection() {
   return (
-    <section className="space-y-6">
+    <section id="connect" className="space-y-6">
       <h2 className="text-2xl font-semibold text-center text-foreground">Connect With Me</h2>
 
       <div className="grid gap-3">
         {socialLinks.map((link, index) => {
-          const IconComponent = link.icon
+          const IconComponent = link.icon;
           return (
             <Button
               key={link.name}
@@ -50,9 +50,9 @@ export function SocialLinksSection() {
               <IconComponent className="w-5 h-5 mr-4" />
               <span className="font-medium">{link.name}</span>
             </Button>
-          )
+          );
         })}
       </div>
     </section>
-  )
+  );
 }

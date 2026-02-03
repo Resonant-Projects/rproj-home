@@ -1,9 +1,9 @@
-import { ProfileHeader } from "@/components/profile-header"
-import { ProjectsSection } from "@/components/projects-section"
-import { SocialLinksSection } from "@/components/social-links-section"
-import { NewsletterSignup } from "@/components/newsletter-signup"
-import { Footer } from "@/components/footer"
-import { FlickeringGrid } from "@/components/ui/flickering-grid"
+import { Footer } from "@/components/footer";
+import { NewsletterSignup } from "@/components/newsletter-signup";
+import { ProfileHeader } from "@/components/profile-header";
+import { ProjectsSection } from "@/components/projects-section";
+import { SocialLinksSection } from "@/components/social-links-section";
+import { FlickeringGrid } from "@/components/ui/flickering-grid";
 
 export default function LinkTreePage() {
   return (
@@ -27,5 +27,5 @@ export default function LinkTreePage() {
         </div>
       </div>
     </main>
-  )
+  );
 }

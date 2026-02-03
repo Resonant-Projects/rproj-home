@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function ProfileHeader() {
   return (
@@ -10,7 +10,9 @@ export function ProfileHeader() {
             alt="Profile photo"
             className="object-cover"
           />
-          <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">YN</AvatarFallback>
+          <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">
+            YN
+          </AvatarFallback>
         </Avatar>
       </div>
 
@@ -24,5 +26,5 @@ export function ProfileHeader() {
         </p>
       </div>
     </header>
-  )
+  );
 }

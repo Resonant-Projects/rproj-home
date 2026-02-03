@@ -1,16 +1,10 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ArrowSquareOut, GithubLogo } from "@phosphor-icons/react";
-import { ProjectsAccordion, type Project } from "@/components/projects-accordion";
+import { type Project, ProjectsAccordion } from "@/components/projects-accordion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const featuredProjects: Project[] = [
   {
@@ -42,25 +36,23 @@ const moreProjects: Project[] = [
   {
     title: "Declination Living",
     description: "Astronomy/astrology app with 3D globe visualizations",
-    techStack: ["React", "Vite", "Convex", "Three.js", "Framer Motion"],
+    techStack: ["React", "TanStack Start", "Convex", "Three.js", "Framer Motion"],
     liveUrl: "https://living.rproj.art",
     repoUrl: "https://github.com/keithce/declination-living",
   },
   {
     title: "Pick A Park",
     description: "Random park selector to alleviate decision fatigue",
-    techStack: ["React", "Vite", "Convex", "Clerk", "TanStack"],
-    liveUrl: "https://parks.rproj.art",
+    techStack: ["React", "TanStack Start", "Convex", "Clerk"],
+    liveUrl: "https://www.pickapark.app",
     repoUrl: "https://github.com/Resonant-Projects/park-chooser",
   },
 ];
 
 export function ProjectsSection() {
   return (
-    <section className="space-y-6">
-      <h2 className="text-2xl font-semibold text-center text-foreground">
-        Featured Projects
-      </h2>
+    <section id="projects" className="space-y-6">
+      <h2 className="text-2xl font-semibold text-center text-foreground">Featured Projects</h2>
 
       <div className="grid gap-4">
         {featuredProjects.map((project, index) => (
@@ -71,9 +63,7 @@ export function ProjectsSection() {
           >
             <CardHeader className="pb-3">
               <CardTitle className="text-card-foreground group-hover:text-primary transition-colors text-xl flex items-center gap-2">
-                {project.icon && (
-                  <img src={project.icon} alt="" className="w-6 h-6 rounded" />
-                )}
+                {project.icon && <img src={project.icon} alt="" className="w-6 h-6 rounded" />}
                 {project.title}
               </CardTitle>
               <CardDescription className="text-muted-foreground">

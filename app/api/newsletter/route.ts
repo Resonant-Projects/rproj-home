@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,10 +13,7 @@ export async function POST(request: NextRequest) {
 
     if (!KIT_API_SECRET) {
       console.error("KIT_API_KEY environment variable is not set");
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
     }
 
     // Create subscriber using Kit API
@@ -51,14 +48,11 @@ export async function POST(request: NextRequest) {
           error: kitData.message || "Failed to subscribe to newsletter",
           details: kitData,
         },
-        { status: kitResponse.status }
+        { status: kitResponse.status },
       );
     }
   } catch (error) {
     console.error("Newsletter signup error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
