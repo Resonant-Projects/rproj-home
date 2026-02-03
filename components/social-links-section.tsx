@@ -17,7 +17,7 @@ const socialLinks = [
     color: "hover:bg-blue-600 hover:text-white",
   },
   {
-    name: "Twitter",
+    name: "X",
     url: "https://twitter.com/keithce",
     icon: XLogo,
     color: "hover:bg-sky-500 hover:text-white",

@@ -9,9 +9,9 @@ A personal link tree website built with Next.js 16 (App Router) for Keith Elliot
 ## Commands
 
 ```bash
-pnpm dev      # Start development server on localhost:3000
-pnpm build    # Build for production
-pnpm start    # Start production server
+bun dev       # Start development server on localhost:3000
+bun run build # Build for production
+bun start     # Start production server
 ```
 
 ## Architecture
@@ -20,7 +20,7 @@ pnpm start    # Start production server
 - **Framework**: Next.js 16 with App Router
 - **Styling**: Tailwind CSS v4 with custom brand color palette
 - **UI Components**: shadcn/ui (new-york style)
-- **Icons**: Lucide React
+- **Icons**: Phosphor Icons (@phosphor-icons/react)
 - **Fonts**: Geist Sans & Geist Mono
 - **Analytics**: Vercel Analytics
 - **Newsletter**: Kit (ConvertKit) API integration
