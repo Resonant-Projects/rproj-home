@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mail, CheckCircle } from "lucide-react";
+import { EnvelopeSimple, CheckCircle } from "@phosphor-icons/react";
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -69,7 +69,7 @@ export function NewsletterSignup() {
       <CardContent className="p-6">
         <div className="text-center mb-6">
           <div className="flex items-center justify-center mb-3">
-            <Mail className="h-8 w-8 text-[#6e2765]" />
+            <EnvelopeSimple className="h-8 w-8 text-[#6e2765]" />
           </div>
           <h3 className="text-xl font-semibold text-[#6e2765] mb-2">
             Stay Updated

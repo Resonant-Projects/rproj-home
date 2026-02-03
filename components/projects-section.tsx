@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -7,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Github } from "lucide-react";
+import { ArrowSquareOut, GithubLogo } from "@phosphor-icons/react";
 import { ProjectsAccordion, type Project } from "@/components/projects-accordion";
 
 const featuredProjects: Project[] = [
@@ -106,7 +108,7 @@ export function ProjectsSection() {
                       />
                     }
                   >
-                    <ExternalLink className="w-4 h-4 mr-2" />
+                    <ArrowSquareOut className="w-4 h-4 mr-2" />
                     Visit
                   </Button>
                 )}
@@ -125,7 +127,7 @@ export function ProjectsSection() {
                       />
                     }
                   >
-                    <Github className="w-4 h-4 mr-2" />
+                    <GithubLogo className="w-4 h-4 mr-2" />
                     Code
                   </Button>
                 )}
