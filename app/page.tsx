@@ -7,7 +7,7 @@ import { FlickeringGrid } from "@/components/ui/flickering-grid";
 
 export default function LinkTreePage() {
   return (
-    <main className="min-h-screen bg-background relative">
+    <main id="main-content" className="min-h-screen bg-background relative">
       <FlickeringGrid
         className="fixed inset-0 z-0"
         squareSize={3}

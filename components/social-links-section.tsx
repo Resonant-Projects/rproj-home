@@ -2,6 +2,7 @@
 
 import { EnvelopeSimple, GithubLogo, LinkedinLogo, XLogo } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const socialLinks = [
   {
@@ -18,7 +19,7 @@ const socialLinks = [
   },
   {
     name: "X",
-    url: "https://twitter.com/keithce",
+    url: "https://x.com/keithce",
     icon: XLogo,
     color: "hover:bg-sky-500 hover:text-white",
   },
@@ -33,7 +34,7 @@ const socialLinks = [
 export function SocialLinksSection() {
   return (
     <section id="connect" className="space-y-6">
-      <h2 className="text-2xl font-semibold text-center text-foreground">Connect With Me</h2>
+      <h2 className="text-2xl font-semibold text-foreground">Connect With Me</h2>
 
       <div className="grid gap-3">
         {socialLinks.map((link, index) => {
@@ -43,7 +44,7 @@ export function SocialLinksSection() {
               key={link.name}
               variant="outline"
               size="lg"
-              className={`w-full justify-start text-left h-14 border-border bg-card hover:scale-[1.02] transition-all duration-300 animate-fade-in-up ${link.color}`}
+              className={cn("w-full justify-start text-left h-14 border-border bg-card transition-[background-color,color] duration-150 animate-fade-in-up", link.color)}
               style={{ animationDelay: `${index * 0.1}s` }}
               render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}
             >

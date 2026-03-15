@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowSquareOut, GithubLogo } from "@phosphor-icons/react";
+import Image from "next/image";
 import { type Project, ProjectsAccordion } from "@/components/projects-accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,7 @@ const featuredProjects: Project[] = [
 const moreProjects: Project[] = [
   {
     title: "Declination Living",
-    description: "Astronomy/astrology app with 3D globe visualizations",
+    description: "Astrology-based relocation app that maps planetary declinations to Earth latitudes on a 3D globe",
     techStack: ["React", "TanStack Start", "Convex", "Three.js", "Framer Motion"],
     liveUrl: "https://living.rproj.art",
     repoUrl: "https://github.com/keithce/declination-living",
@@ -52,18 +53,18 @@ const moreProjects: Project[] = [
 export function ProjectsSection() {
   return (
     <section id="projects" className="space-y-6">
-      <h2 className="text-2xl font-semibold text-center text-foreground">Featured Projects</h2>
+      <h2 className="text-2xl font-semibold text-foreground">Featured Projects</h2>
 
       <div className="grid gap-4">
         {featuredProjects.map((project, index) => (
           <Card
             key={project.title}
-            className="group hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-border bg-card animate-fade-in-up"
+            className="group hover:shadow-lg transition-[box-shadow] duration-150 border-border bg-card animate-fade-in-up"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <CardHeader className="pb-3">
               <CardTitle className="text-card-foreground group-hover:text-primary transition-colors text-xl flex items-center gap-2">
-                {project.icon && <img src={project.icon} alt="" className="w-6 h-6 rounded" />}
+                {project.icon && <Image src={project.icon} alt="" width={24} height={24} className="rounded" />}
                 {project.title}
               </CardTitle>
               <CardDescription className="text-muted-foreground">
@@ -77,7 +78,7 @@ export function ProjectsSection() {
                   <Badge
                     key={tech}
                     variant="secondary"
-                    className="text-xs bg-secondary text-slate-50 px-2 py-1.5"
+                    className="text-xs bg-secondary text-secondary-foreground px-2 py-1.5"
                   >
                     {tech}
                   </Badge>

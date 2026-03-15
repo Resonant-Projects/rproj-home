@@ -133,9 +133,44 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
       const newHeight = height || container.clientHeight;
       setCanvasSize({ width: newWidth, height: newHeight });
       gridParams = setupCanvas(canvas, newWidth, newHeight);
+      return gridParams;
     };
 
-    updateCanvasSize();
+    const currentParams = updateCanvasSize();
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // If reduced motion, draw once and skip animation loop
+    if (prefersReducedMotion) {
+      drawGrid(
+        ctx,
+        canvas.width,
+        canvas.height,
+        currentParams.cols,
+        currentParams.rows,
+        currentParams.squares,
+        currentParams.dpr,
+      );
+
+      const resizeObserver = new ResizeObserver(() => {
+        const params = updateCanvasSize();
+        drawGrid(
+          ctx,
+          canvas.width,
+          canvas.height,
+          params.cols,
+          params.rows,
+          params.squares,
+          params.dpr,
+        );
+      });
+
+      resizeObserver.observe(container);
+
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }
 
     let lastTime = 0;
     const animate = (time: number) => {
