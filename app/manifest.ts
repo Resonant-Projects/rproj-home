@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Connect with me through my projects, newsletter, and social media.",
     start_url: "/",
     display: "standalone",
-    background_color: "#09090b",
-    theme_color: "#7c3aed",
+    background_color: "#2c1028",
+    theme_color: "#7e3775",
     icons: [
       {
         src: "/favicon-48.png",

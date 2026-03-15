@@ -1,21 +1,13 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 export function Footer() {
-  const [year, setYear] = useState("");
-
-  useEffect(() => {
-    setYear(new Date().getFullYear().toString());
-  }, []);
+  const year = new Date().getFullYear();
 
   return (
     <footer className="text-center py-6 border-t border-border">
       <p className="text-sm text-muted-foreground">
-        © {year} Keith Elliott. Built with Next.js & Tailwind CSS.
+        &copy; {year} Keith Elliott
       </p>
       <p className="text-xs text-muted-foreground mt-2">
-        Designed for performance, accessibility, and elegance.
+        Creating art that resonates in code, frequency, and color.
       </p>
     </footer>
   );

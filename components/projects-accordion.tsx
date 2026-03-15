@@ -2,6 +2,7 @@
 
 import { ArrowSquareOut, CaretDown, GithubLogo } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -76,13 +77,13 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 border-b border-border pb-6">
       <Button
         variant="ghost"
         onClick={toggleExpanded}
         aria-expanded={isExpanded}
         aria-controls="more-projects-content"
-        className="w-full border-t border-border pt-6 rounded-none hover:bg-transparent text-muted-foreground hover:text-primary transition-colors"
+        className="w-full rounded-none hover:bg-transparent text-muted-foreground hover:text-primary transition-colors"
       >
         <span>{isExpanded ? "Show Less" : "More Projects"}</span>
         <motion.span
@@ -106,7 +107,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
             exit="exit"
             className="overflow-hidden"
           >
-            <div className="grid gap-4 pt-4">
+            <div className="grid gap-4 p-4">
               {projects.map((project, index) => (
                 <motion.div
                   key={project.title}
@@ -115,11 +116,11 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                   initial="hidden"
                   animate="visible"
                 >
-                  <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-border bg-card">
+                  <Card className="group hover:shadow-lg transition-[box-shadow] duration-150 border-border bg-card">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-card-foreground group-hover:text-primary transition-colors text-xl flex items-center gap-2">
                         {project.icon && (
-                          <img src={project.icon} alt="" className="w-6 h-6 rounded" />
+                          <Image src={project.icon} alt="" width={24} height={24} className="rounded" />
                         )}
                         {project.title}
                       </CardTitle>
@@ -134,7 +135,7 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
                           <Badge
                             key={tech}
                             variant="secondary"
-                            className="text-xs bg-secondary text-slate-50 px-2 py-1.5"
+                            className="text-xs bg-secondary text-secondary-foreground px-2 py-1.5"
                           >
                             {tech}
                           </Badge>

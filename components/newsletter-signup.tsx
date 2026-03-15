@@ -48,7 +48,7 @@ export function NewsletterSignup() {
   if (isSubmitted) {
     return (
       <section id="newsletter">
-        <Card className="bg-gradient-to-br from-brand-50 to-brand-50 border-brand-200 shadow-lg">
+        <Card className="border-brand-200 shadow-lg" style={{ backgroundImage: 'linear-gradient(to bottom right, var(--color-brand-50), var(--color-brand-200))' }}>
           <CardContent className="p-6 text-center">
             <div className="flex items-center justify-center mb-4">
               <CheckCircle className="h-12 w-12 text-brand-600" />
@@ -68,7 +68,7 @@ export function NewsletterSignup() {
   return (
     <section id="newsletter">
       <h2 className="sr-only">Newsletter Signup</h2>
-      <Card className="bg-gradient-to-br from-brand-50 to-brand-50 border-brand-200 shadow-lg hover:shadow-xl transition-all duration-300">
+      <Card className="border-brand-200 shadow-lg transition-shadow duration-150" style={{ backgroundImage: 'linear-gradient(to bottom right, var(--color-brand-50), var(--color-brand-200))' }}>
         <CardContent className="p-6">
           <div className="text-center mb-6">
             <div className="flex items-center justify-center mb-3">
@@ -82,22 +82,25 @@ export function NewsletterSignup() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
+              <label htmlFor="newsletter-email" className="sr-only">Email address</label>
               <Input
+                id="newsletter-email"
                 type="email"
                 placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-white border-brand-200 focus:border-brand-600 focus:ring-brand-600 text-brand-600 placeholder:text-brand-400"
                 required
+                aria-describedby={error ? "newsletter-error" : undefined}
               />
             </div>
 
-            {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+            {error && <p id="newsletter-error" role="alert" className="text-sm text-red-600 text-center">{error}</p>}
 
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-brand-600 to-brand-400 hover:from-brand-600/90 hover:to-brand-400/90 text-white font-medium py-2.5 transition-all duration-300 transform hover:scale-[1.02]"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2.5 transition-[background-color] duration-150"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">
