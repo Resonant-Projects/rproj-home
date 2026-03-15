@@ -2,6 +2,7 @@
 
 import { EnvelopeSimple, GithubLogo, LinkedinLogo, XLogo } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const socialLinks = [
   {
@@ -43,7 +44,7 @@ export function SocialLinksSection() {
               key={link.name}
               variant="outline"
               size="lg"
-              className={`w-full justify-start text-left h-14 border-border bg-card transition-[background-color,color] duration-150 animate-fade-in-up ${link.color}`}
+              className={cn("w-full justify-start text-left h-14 border-border bg-card transition-[background-color,color] duration-150 animate-fade-in-up", link.color)}
               style={{ animationDelay: `${index * 0.1}s` }}
               render={<a href={link.url} target="_blank" rel="noopener noreferrer" />}
             >

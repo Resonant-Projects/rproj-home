@@ -48,7 +48,7 @@ export function NewsletterSignup() {
   if (isSubmitted) {
     return (
       <section id="newsletter">
-        <Card className="border-brand-200 shadow-lg" style={{ backgroundImage: 'linear-gradient(to bottom right, var(--color-brand-50), var(--color-brand-200))' }}>
+        <Card className="bg-gradient-to-br from-[color:var(--color-brand-50)] to-[color:var(--color-brand-200)] border-brand-200 shadow-lg">
           <CardContent className="p-6 text-center">
             <div className="flex items-center justify-center mb-4">
               <CheckCircle className="h-12 w-12 text-brand-600" />
@@ -68,7 +68,7 @@ export function NewsletterSignup() {
   return (
     <section id="newsletter">
       <h2 className="sr-only">Newsletter Signup</h2>
-      <Card className="border-brand-200 shadow-lg transition-shadow duration-150" style={{ backgroundImage: 'linear-gradient(to bottom right, var(--color-brand-50), var(--color-brand-200))' }}>
+      <Card className="bg-gradient-to-br from-[color:var(--color-brand-50)] to-[color:var(--color-brand-200)] border-brand-200 shadow-lg transition-shadow duration-150">
         <CardContent className="p-6">
           <div className="text-center mb-6">
             <div className="flex items-center justify-center mb-3">

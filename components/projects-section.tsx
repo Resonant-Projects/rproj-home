@@ -36,7 +36,7 @@ const featuredProjects: Project[] = [
 const moreProjects: Project[] = [
   {
     title: "Declination Living",
-    description: "Astronomy/astrology app with 3D globe visualizations",
+    description: "Astrology-based relocation app that maps planetary declinations to Earth latitudes on a 3D globe",
     techStack: ["React", "TanStack Start", "Convex", "Three.js", "Framer Motion"],
     liveUrl: "https://living.rproj.art",
     repoUrl: "https://github.com/keithce/declination-living",
