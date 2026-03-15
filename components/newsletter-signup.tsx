@@ -95,7 +95,7 @@ export function NewsletterSignup() {
               />
             </div>
 
-            {error && <p id="newsletter-error" role="alert" className="text-sm text-red-600 text-center">{error}</p>}
+            {error && <p id="newsletter-error" role="alert" className="text-sm text-destructive text-center">{error}</p>}
 
             <Button
               type="submit"
