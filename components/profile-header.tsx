@@ -10,7 +10,7 @@ export function ProfileHeader() {
             alt="Keith Elliott"
             width={192}
             height={192}
-            className="object-cover aspect-square rounded-full"
+            className="object-cover"
           />
           <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-semibold">
             KE
