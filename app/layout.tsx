@@ -109,7 +109,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body suppressHydrationWarning className={GeistSans.className}>
+      <body className={GeistSans.className}>
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-primary focus:text-primary-foreground">Skip to content</a>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center"><span className="text-muted-foreground font-medium">Loading...</span></div>}>{children}</Suspense>
