@@ -1,5 +1,4 @@
 import { Footer } from "@/components/footer";
-import { NewsletterSignup } from "@/components/newsletter-signup";
 import { ProfileHeader } from "@/components/profile-header";
 import { ProjectsSection } from "@/components/projects-section";
 import { SocialLinksSection } from "@/components/social-links-section";
@@ -22,7 +21,6 @@ export default function LinkTreePage() {
           <ProfileHeader />
           <ProjectsSection />
           <SocialLinksSection />
-          <NewsletterSignup />
           <Footer />
         </div>
       </div>
