@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Keith Elliott - Link Tree",
     short_name: "Keith Elliott",
-    description: "Connect with me through my projects, newsletter, and social media.",
+    description: "Connect with me through my projects and social media.",
     start_url: "/",
     display: "standalone",
     background_color: "#2c1028",

@@ -10,7 +10,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Keith Elliott | Full-Stack Developer & Audio Engineer",
   description:
-    "Explore Keith Elliott's projects in React, TypeScript, and audio engineering. View code, live demos, and join the newsletter for tech insights.",
+    "Explore Keith Elliott's projects in React, TypeScript, and audio engineering. View code, live demos, and creative tech work.",
   generator: "Next.js",
   keywords: [
     "Keith Elliott",
@@ -40,8 +40,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Keith Elliott | Developer & Audio Engineer",
-    description:
-      "Projects. Insights. Creative tech work. Explore my portfolio and join the community.",
+    description: "Projects. Insights. Creative tech work. Explore my portfolio.",
     creator: "@keithce",
   },
   icons: {
