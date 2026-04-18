@@ -1,10 +1,7 @@
 "use client";
 
-import { ArrowSquareOut, GithubLogo } from "@phosphor-icons/react";
+import { ProjectCard } from "@/components/project-card";
 import { type Project, ProjectsAccordion } from "@/components/projects-accordion";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const featuredProjects: Project[] = [
   {
@@ -26,7 +23,7 @@ const featuredProjects: Project[] = [
   },
   {
     title: "License Monitor",
-    description: "Light-weight app to monitor a variety of license servers",
+    description: "Light-weight app to monitor a variety of license servers.",
     techStack: ["Rust", "Python", "OpenTelemetry"],
     liveUrl: "https://license.rproj.art",
   },
@@ -35,14 +32,14 @@ const featuredProjects: Project[] = [
 const moreProjects: Project[] = [
   {
     title: "Declination Living",
-    description: "Astronomy/astrology app with 3D globe visualizations",
+    description: "Astronomy/astrology app with 3D globe visualizations.",
     techStack: ["React", "TanStack Start", "Convex", "Three.js", "Framer Motion"],
     liveUrl: "https://living.rproj.art",
     repoUrl: "https://github.com/keithce/declination-living",
   },
   {
     title: "Pick A Park",
-    description: "Random park selector to alleviate decision fatigue",
+    description: "Random park selector to alleviate decision fatigue.",
     techStack: ["React", "TanStack Start", "Convex", "Clerk"],
     liveUrl: "https://www.pickapark.app",
     repoUrl: "https://github.com/Resonant-Projects/park-chooser",
@@ -51,83 +48,28 @@ const moreProjects: Project[] = [
 
 export function ProjectsSection() {
   return (
-    <section id="projects" className="space-y-6">
-      <h2 className="text-2xl font-semibold text-center text-foreground">Featured Projects</h2>
+    <section id="projects" className="space-y-8">
+      <header className="flex items-end justify-between gap-4">
+        <div className="space-y-1.5">
+          <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-ink-500">
+            <span aria-hidden="true">{"///"}</span> Deployments
+          </p>
+          <h2 className="font-display text-4xl md:text-[2.75rem] leading-none text-ink-100 tracking-tight">
+            Currently <span className="italic text-glow">shipping</span>
+          </h2>
+        </div>
+        <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-ink-500 pb-1">
+          {String(featuredProjects.length + moreProjects.length).padStart(2, "0")} projects
+        </span>
+      </header>
 
-      <div className="grid gap-4">
+      <div className="grid gap-3 animate-fade-in-up">
         {featuredProjects.map((project, index) => (
-          <Card
-            key={project.title}
-            className="group hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-border bg-card animate-fade-in-up"
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            <CardHeader className="pb-3">
-              <CardTitle className="text-card-foreground group-hover:text-primary transition-colors text-xl flex items-center gap-2">
-                {project.icon && <img src={project.icon} alt="" className="w-6 h-6 rounded" />}
-                {project.title}
-              </CardTitle>
-              <CardDescription className="text-muted-foreground">
-                {project.description}
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-4">
-              <div className="flex flex-wrap gap-2">
-                {project.techStack.map((tech) => (
-                  <Badge
-                    key={tech}
-                    variant="secondary"
-                    className="text-xs bg-secondary text-slate-50 px-2 py-1.5"
-                  >
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                {project.liveUrl && (
-                  <Button
-                    size="sm"
-                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
-                    render={
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`Visit ${project.title}`}
-                      />
-                    }
-                  >
-                    <ArrowSquareOut className="w-4 h-4 mr-2" />
-                    Visit
-                  </Button>
-                )}
-
-                {project.repoUrl && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="flex-1 border-border hover:bg-accent hover:text-accent-foreground bg-transparent"
-                    render={
-                      <a
-                        href={project.repoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`View code for ${project.title}`}
-                      />
-                    }
-                  >
-                    <GithubLogo className="w-4 h-4 mr-2" />
-                    Code
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+          <ProjectCard key={project.title} project={project} index={index} />
         ))}
       </div>
 
-      <ProjectsAccordion projects={moreProjects} />
+      <ProjectsAccordion projects={moreProjects} startIndex={featuredProjects.length} />
     </section>
   );
 }
