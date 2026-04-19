@@ -48,12 +48,7 @@ export function ProfileHeader() {
           </h1>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Spectrum bars={14} className="h-5 w-28" />
-          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-ink-500">
-            432 Hz
-          </span>
-        </div>
+        <Spectrum bars={14} className="h-5 w-28" />
 
         <p className="max-w-sm text-base leading-relaxed text-ink-300">
           Crafting art that resonates across <span className="text-ink-100">code</span>,{" "}

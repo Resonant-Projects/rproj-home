@@ -18,7 +18,7 @@ const socialLinks = [
   {
     name: "X",
     handle: "@keithce",
-    url: "https://twitter.com/keithce",
+    url: "https://x.com/keithce",
     icon: XLogo,
   },
   {
