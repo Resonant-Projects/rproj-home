@@ -58,6 +58,10 @@ export function ProfileHeader() {
           <span className="text-ink-100">frequency</span>, and{" "}
           <span className="text-ink-100">color</span>.
         </p>
+
+        <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-ink-500">
+          Open to senior engineering roles
+        </p>
       </div>
     </header>
   );
