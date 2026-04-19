@@ -2,10 +2,18 @@ import { Analytics } from "@vercel/analytics/react";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
+import { Instrument_Serif } from "next/font/google";
 import type React from "react";
 import { Suspense } from "react";
-import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Keith Elliott | Full-Stack Developer & Audio Engineer",
@@ -59,7 +67,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${GeistMono.variable} ${instrumentSerif.variable} dark`}
+    >
       <head>
         <script
           type="application/ld+json"
@@ -89,7 +100,7 @@ export default function RootLayout({
                   sameAs: [
                     "https://github.com/keithce",
                     "https://linkedin.com/in/keithcelliott",
-                    "https://x.com/keithce",
+                    "https://twitter.com/keithce",
                   ],
                   knowsAbout: [
                     "Full-Stack Development",
@@ -109,10 +120,7 @@ export default function RootLayout({
         />
       </head>
       <body className={GeistSans.className}>
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-primary focus:text-primary-foreground">Skip to content</a>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center"><span className="text-muted-foreground font-medium">Loading...</span></div>}>{children}</Suspense>
-        </ThemeProvider>
+        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
         <Analytics />
       </body>
     </html>

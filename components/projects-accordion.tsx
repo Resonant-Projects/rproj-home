@@ -1,12 +1,9 @@
 "use client";
 
-import { ArrowSquareOut, CaretDown, GithubLogo } from "@phosphor-icons/react";
+import { CaretDown } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import Image from "next/image";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ProjectCard } from "@/components/project-card";
 
 export interface Project {
   title: string;
@@ -19,81 +16,54 @@ export interface Project {
 
 interface ProjectsAccordionProps {
   projects: Project[];
+  startIndex?: number;
 }
 
 const contentVariants = {
-  collapsed: {
-    height: 0,
-    opacity: 0,
-  },
+  collapsed: { height: 0, opacity: 0 },
   expanded: {
     height: "auto",
     opacity: 1,
     transition: {
-      height: {
-        duration: 0.3,
-        ease: [0.04, 0.62, 0.23, 0.98] as const,
-      },
-      opacity: {
-        duration: 0.25,
-        ease: "easeOut" as const,
-      },
+      height: { duration: 0.45, ease: [0.16, 1, 0.3, 1] as const },
+      opacity: { duration: 0.3, ease: "easeOut" as const, delay: 0.1 },
     },
   },
   exit: {
     height: 0,
     opacity: 0,
     transition: {
-      height: {
-        duration: 0.25,
-        ease: [0.04, 0.62, 0.23, 0.98] as const,
-      },
-      opacity: {
-        duration: 0.2,
-        ease: "easeIn" as const,
-      },
+      height: { duration: 0.35, ease: [0.7, 0, 0.84, 0] as const },
+      opacity: { duration: 0.2, ease: "easeIn" as const },
     },
   },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (index: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: index * 0.1,
-      type: "spring" as const,
-      stiffness: 300,
-      damping: 24,
-    },
-  }),
-};
-
-export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
+export function ProjectsAccordion({ projects, startIndex = 0 }: ProjectsAccordionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
-  const toggleExpanded = () => setIsExpanded((prev) => !prev);
-
   return (
-    <div className="mt-6 border-b border-border pb-6">
-      <Button
-        variant="ghost"
-        onClick={toggleExpanded}
+    <div className="pt-2">
+      <button
+        type="button"
+        onClick={() => setIsExpanded((prev) => !prev)}
         aria-expanded={isExpanded}
         aria-controls="more-projects-content"
-        className="w-full rounded-none hover:bg-transparent text-muted-foreground hover:text-primary transition-colors"
+        className="group flex w-full items-center gap-3 text-left"
       >
-        <span>{isExpanded ? "Show Less" : "More Projects"}</span>
-        <motion.span
-          animate={{ rotate: isExpanded ? 180 : 0 }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, ease: "easeInOut" }}
-          className="ml-2"
-        >
-          <CaretDown className="w-4 h-4" />
-        </motion.span>
-      </Button>
+        <span className="hairline flex-1" />
+        <span className="flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-ink-500 group-hover:text-ink-100 transition-colors">
+          {isExpanded ? "Collapse" : "Show all"}
+          <motion.span
+            animate={{ rotate: isExpanded ? 180 : 0 }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, ease: "easeInOut" }}
+          >
+            <CaretDown className="w-3 h-3" weight="bold" />
+          </motion.span>
+        </span>
+        <span className="hairline flex-1" />
+      </button>
 
       <AnimatePresence initial={false}>
         {isExpanded && (
@@ -107,82 +77,9 @@ export function ProjectsAccordion({ projects }: ProjectsAccordionProps) {
             exit="exit"
             className="overflow-hidden"
           >
-            <div className="grid gap-4 p-4">
+            <div className="grid gap-3 pt-5">
               {projects.map((project, index) => (
-                <motion.div
-                  key={project.title}
-                  custom={index}
-                  variants={shouldReduceMotion ? undefined : cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <Card className="group hover:shadow-lg transition-[box-shadow] duration-150 border-border bg-card">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-card-foreground group-hover:text-primary transition-colors text-xl flex items-center gap-2">
-                        {project.icon && (
-                          <Image src={project.icon} alt="" width={24} height={24} className="rounded" />
-                        )}
-                        {project.title}
-                      </CardTitle>
-                      <CardDescription className="text-muted-foreground">
-                        {project.description}
-                      </CardDescription>
-                    </CardHeader>
-
-                    <CardContent className="space-y-4">
-                      <div className="flex flex-wrap gap-2">
-                        {project.techStack.map((tech) => (
-                          <Badge
-                            key={tech}
-                            variant="secondary"
-                            className="text-xs bg-secondary text-secondary-foreground px-2 py-1.5"
-                          >
-                            {tech}
-                          </Badge>
-                        ))}
-                      </div>
-
-                      <div className="flex gap-2">
-                        {project.liveUrl && (
-                          <Button
-                            size="sm"
-                            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
-                            render={
-                              <a
-                                href={project.liveUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label={`Visit ${project.title}`}
-                              />
-                            }
-                          >
-                            <ArrowSquareOut className="w-4 h-4 mr-2" />
-                            Visit
-                          </Button>
-                        )}
-
-                        {project.repoUrl && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="flex-1 border-border hover:bg-accent hover:text-accent-foreground bg-transparent"
-                            render={
-                              <a
-                                href={project.repoUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label={`View code for ${project.title}`}
-                              />
-                            }
-                          >
-                            <GithubLogo className="w-4 h-4 mr-2" />
-                            Code
-                          </Button>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                <ProjectCard key={project.title} project={project} index={startIndex + index} />
               ))}
             </div>
           </motion.div>
