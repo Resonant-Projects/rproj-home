@@ -41,7 +41,7 @@ export function SocialLinksSection() {
           const Icon = link.icon;
           const isMail = link.name === "Email";
           return (
-            <li key={link.name} className="relative overflow-hidden">
+            <li key={link.name} className="group/channel relative overflow-hidden">
               <span
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 bg-glow/[0.04] translate-x-[-101%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/channel:translate-x-0"
@@ -50,8 +50,7 @@ export function SocialLinksSection() {
                 href={link.url}
                 target={isMail ? undefined : "_blank"}
                 rel={isMail ? undefined : "noopener noreferrer"}
-                className="group/channel relative flex items-center gap-4 py-3 text-sm text-ink-300 transition-colors hover:text-ink-100"
-                style={{ animationDelay: `${index * 60}ms` }}
+                className="relative flex items-center gap-4 py-3 text-sm text-ink-300 transition-colors hover:text-ink-100"
               >
                 <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-ink-500 w-5 transition-colors duration-300 group-hover/channel:text-glow">
                   {String(index + 1).padStart(2, "0")}

@@ -129,6 +129,7 @@
   }
   body {
     @apply bg-background text-foreground;
+
     font-feature-settings: "ss01", "cv11";
   }
   ::selection {
@@ -223,7 +224,7 @@
 }
 
 .underline-grow {
-  background-image: linear-gradient(to right, currentColor, currentColor);
+  background-image: linear-gradient(to right, currentcolor, currentcolor);
   background-repeat: no-repeat;
   background-size: 0% 1px;
   background-position: 0 100%;

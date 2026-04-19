@@ -28,10 +28,13 @@ export function ProfileHeader() {
           <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-ink-500">
             Full-Stack Developer × Audio Engineer
           </p>
-          <h1 className="group/name font-display text-5xl md:text-6xl leading-[0.95] tracking-tight text-ink-100">
+          <h1
+            aria-label="Keith Elliott"
+            className="group/name font-display text-5xl md:text-6xl leading-[0.95] tracking-tight text-ink-100"
+          >
             Keith
             <br />
-            <span className="italic text-glow inline-flex">
+            <span aria-hidden="true" className="italic text-glow inline-flex">
               {ELLIOTT.split("").map((ch, i) => (
                 <span
                   key={`${ch}-${

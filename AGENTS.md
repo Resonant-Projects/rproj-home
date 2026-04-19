@@ -17,16 +17,18 @@ bun start     # Start production server
 ## Architecture
 
 ### Tech Stack
+
 - **Framework**: Next.js 16 with App Router
 - **Styling**: Tailwind CSS v4 with custom brand color palette
 - **UI Components**: shadcn/ui (new-york style)
 - **Icons**: Phosphor Icons (@phosphor-icons/react)
-- **Fonts**: Geist Sans & Geist Mono
+- **Fonts**: Geist Sans, Geist Mono, & Instrument Serif
 - **Analytics**: Vercel Analytics
 - **Newsletter**: Kit (ConvertKit) API integration
 
 ### Project Structure
-```
+
+```text
 app/
   layout.tsx          # Root layout with fonts and analytics
   page.tsx            # Main link tree page composition
@@ -46,12 +48,15 @@ lib/
 ```
 
 ### Brand Color System
+
 Colors are defined as CSS custom properties in `app/globals.css`:
+
 - `--color-brand-50` through `--color-brand-900` (purple tones)
 - Semantic tokens (`--background`, `--foreground`, `--primary`, etc.) reference brand colors
 - Dark mode support via `.dark` class
 
 ### Path Aliases
+
 Uses `@/*` alias for imports from project root (configured in tsconfig.json).
 
 ## Environment Variables

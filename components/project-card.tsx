@@ -13,10 +13,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
   const primaryUrl = project.liveUrl ?? project.repoUrl;
 
   return (
-    <article
-      className="group relative border border-ink-800 bg-ink-950/60 backdrop-blur-sm overflow-hidden transition-colors duration-500 hover:border-ink-700 hover:bg-ink-900/70"
-      style={{ animationDelay: `${index * 80}ms` }}
-    >
+    <article className="group relative border border-ink-800 bg-ink-950/60 backdrop-blur-sm overflow-hidden transition-colors duration-500 hover:border-ink-700 hover:bg-ink-900/70">
       <span
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-0 bottom-0 w-[2px] bg-glow origin-top scale-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-y-100"

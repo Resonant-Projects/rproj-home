@@ -5,6 +5,7 @@ import { useEffect } from "react";
 export function DevGreeting() {
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (process.env.NODE_ENV === "production") return;
     const w = window as Window & { __ke_greeted?: boolean };
     if (w.__ke_greeted) return;
     w.__ke_greeted = true;

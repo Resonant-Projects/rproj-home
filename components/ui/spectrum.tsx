@@ -35,6 +35,8 @@ export function Spectrum({ bars = 14, className }: SpectrumProps) {
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
       onPointerDown={handleMove}
+      onPointerUp={handleLeave}
+      onPointerCancel={handleLeave}
       className={`group relative flex items-end gap-[3px] h-4 ${className ?? ""}`}
       aria-hidden="true"
     >
