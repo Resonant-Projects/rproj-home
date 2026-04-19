@@ -9,7 +9,7 @@ export default async function Image() {
   return new ImageResponse(
     <div
       style={{
-        background: "linear-gradient(135deg, #09090b 0%, #1a1a2e 50%, #16213e 100%)",
+        background: "linear-gradient(135deg, #2c1028 0%, #6e2765 50%, #7e3775 100%)",
         width: "100%",
         height: "100%",
         display: "flex",
@@ -32,7 +32,7 @@ export default async function Image() {
       <div
         style={{
           fontSize: 36,
-          color: "#a855f7",
+          color: "#a87da3",
           marginBottom: 40,
         }}
       >
@@ -41,7 +41,7 @@ export default async function Image() {
       <div
         style={{
           fontSize: 24,
-          color: "#9ca3af",
+          color: "#e2d4e0",
         }}
       >
         resonantprojects.art

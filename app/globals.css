@@ -235,3 +235,12 @@
 .underline-grow:focus-visible {
   background-size: 100% 1px;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none;
+  }
+  .animate-pulse-subtle {
+    animation: none;
+  }
+}
