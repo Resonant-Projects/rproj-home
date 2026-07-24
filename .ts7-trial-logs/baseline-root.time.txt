@@ -1,1 +1,0 @@
-bun x tsc --noEmit -p tsconfig.json > .ts7-trial-logs/baseline-root.txt 2>&1  1.75s user 0.26s system 132% cpu 1.517 total
