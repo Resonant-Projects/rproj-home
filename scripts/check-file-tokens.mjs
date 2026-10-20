@@ -211,17 +211,20 @@ function isBinaryBlob(sha) {
   });
 }
 
-/** Whether a custom diff driver (`diff=<name>`) is configured `binary = true`. */
+/**
+ * `diff.<name>.binary` for a custom diff driver (`diff=<name>`):
+ * true => binary, false => forced text, null => unset (git auto-detects).
+ */
 const driverBinaryCache = new Map();
-function isBinaryDiffDriver(name) {
+function diffDriverBinary(name) {
   if (!driverBinaryCache.has(name)) {
-    let value = "";
+    let value = null;
     try {
-      value = git(["config", "--type=bool", "--get", `diff.${name}.binary`]).trim();
+      value = git(["config", "--type=bool", "--get", `diff.${name}.binary`]).trim() === "true";
     } catch {
-      // Unset or invalid: git treats the driver as text.
+      // Unset or invalid: leave null so content detection decides.
     }
-    driverBinaryCache.set(name, value === "true");
+    driverBinaryCache.set(name, value);
   }
   return driverBinaryCache.get(name);
 }
@@ -231,7 +234,10 @@ async function isStagedBinary(rawPath, sha, attrs) {
   const attr = attrs.get(rawPath);
   if (attr === "unset") return true; // `binary` / `-diff`
   if (attr === "set") return false; // forced text
-  if (attr && attr !== "unspecified") return isBinaryDiffDriver(attr); // diff=<driver>
+  if (attr && attr !== "unspecified") {
+    const configured = diffDriverBinary(attr); // diff=<driver>
+    if (configured !== null) return configured;
+  }
   return isBinaryBlob(sha);
 }
 
