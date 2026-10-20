@@ -112,8 +112,11 @@ function globToRegExp(pattern) {
 const IGNORE_REGEXPS = IGNORE_PATTERNS.map(globToRegExp);
 const isIgnored = (path) => IGNORE_REGEXPS.some((re) => re.test(path));
 
+// Generous maxBuffer: --raw/-z listings and batch-check output scale with the
+// number of staged files, and Node's 1 MiB default would throw ENOBUFS at
+// roughly 7,000 staged paths.
 function git(args, opts = {}) {
-  return execFileSync("git", args, { encoding: "utf8", ...opts });
+  return execFileSync("git", args, { encoding: "utf8", maxBuffer: 1024 * 1024 * 1024, ...opts });
 }
 
 /**
