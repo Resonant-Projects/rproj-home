@@ -10,7 +10,7 @@
     "check": "biome check --write .",
     "format": "biome format --write .",
     "lint": "biome lint --write .",
-    "prepare": "simple-git-hooks",
+    "prepare": "simple-git-hooks || true",
     "check:file-tokens": "node scripts/check-file-tokens.mjs"
   },
   "dependencies": {
@@ -54,6 +54,6 @@
     "typescript": "^7.0.2"
   },
   "simple-git-hooks": {
-    "pre-commit": "node scripts/check-file-tokens.mjs"
+    "pre-commit": "if [ -f scripts/check-file-tokens.mjs ]; then node scripts/check-file-tokens.mjs; fi"
   }
 }

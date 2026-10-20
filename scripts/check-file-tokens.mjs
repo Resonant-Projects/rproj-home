@@ -114,15 +114,35 @@ function git(args, opts = {}) {
   return execFileSync("git", args, { encoding: "utf8", ...opts });
 }
 
-/** Staged files, NUL-separated so odd filenames survive. */
-function stagedFiles() {
-  const out = git(["diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z"]);
-  return out.split("\0").filter(Boolean);
+/**
+ * Staged entries as { path, sha } from `git diff --cached --raw -z`.
+ * Sizes are looked up by blob SHA so the (decoded) path is only ever used
+ * for display and ignore matching; it is never passed back to git, which
+ * keeps the hook safe for filenames git stores as non-UTF-8 bytes.
+ *
+ * -z output, one record per entry:
+ *   ":oldmode newmode oldsha newsha S\0path\0"            for A/C/M/T
+ *   ":oldmode newmode oldsha newsha Rnnn\0old\0new\0"     for renames/copies
+ */
+function stagedEntries() {
+  const out = git(["diff", "--cached", "--raw", "-z", "--no-abbrev", "--diff-filter=ACMRT"]);
+  const tokens = out.split("\0");
+  const entries = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const meta = tokens[i];
+    if (!meta.startsWith(":")) continue;
+    const [, , , sha, status] = meta.split(" ");
+    // Renames/copies carry two paths; the second is the staged path.
+    const path = status.startsWith("R") || status.startsWith("C") ? tokens[i + 2] : tokens[i + 1];
+    i += status.startsWith("R") || status.startsWith("C") ? 2 : 1;
+    if (path) entries.push({ path, sha });
+  }
+  return entries;
 }
 
 /** Paths git considers binary in the staged diff ("-\t-\t" in --numstat). */
 function stagedBinaryFiles() {
-  const out = git(["diff", "--cached", "--numstat", "--diff-filter=ACMR", "-z"]);
+  const out = git(["diff", "--cached", "--numstat", "-z", "--diff-filter=ACMRT"]);
   const binary = new Set();
   // -z output, one record per entry:
   //   "added\tdeleted\tpath\0"                   for adds/modifies
@@ -148,17 +168,28 @@ function stagedBinaryFiles() {
   return binary;
 }
 
-function stagedBlobSize(path) {
-  return Number.parseInt(git(["cat-file", "-s", `:${path}`]).trim(), 10);
+/** Blob sizes for a list of SHAs in one `git cat-file --batch-check` call. */
+function blobSizes(shas) {
+  const sizes = new Map();
+  if (shas.length === 0) return sizes;
+  const out = git(["cat-file", "--batch-check=%(objectname) %(objectsize)"], {
+    input: `${shas.join("\n")}\n`,
+  });
+  for (const line of out.split("\n")) {
+    const [sha, size] = line.split(" ");
+    if (sha && size) sizes.set(sha, Number.parseInt(size, 10));
+  }
+  return sizes;
 }
 
 function main() {
   const binary = stagedBinaryFiles();
+  const candidates = stagedEntries().filter(({ path }) => !binary.has(path) && !isIgnored(path));
+  const sizes = blobSizes(candidates.map(({ sha }) => sha));
   const offenders = [];
 
-  for (const path of stagedFiles()) {
-    if (binary.has(path) || isIgnored(path)) continue;
-    const bytes = stagedBlobSize(path);
+  for (const { path, sha } of candidates) {
+    const bytes = sizes.get(sha) ?? 0;
     if (bytes > MAX_BYTES) {
       offenders.push({ path, bytes, tokens: Math.ceil(bytes / BYTES_PER_TOKEN) });
     }
