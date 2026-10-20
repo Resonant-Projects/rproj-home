@@ -8,7 +8,7 @@
 // Bypass in an emergency:   git commit --no-verify
 // Mark a path as generated: add a pattern to IGNORE_PATTERNS below.
 
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 
 const MAX_TOKENS = 5000;
 const BYTES_PER_TOKEN = 4;
@@ -18,8 +18,8 @@ const MAX_BYTES = MAX_TOKENS * BYTES_PER_TOKEN;
 // Ignore list. Glob-ish patterns matched against the repo-relative path:
 //   *   matches anything except "/"      **  matches anything including "/"
 //   A pattern without "/" matches the basename anywhere in the tree.
-// Staged blobs git would treat as binary (a NUL byte in the first 8,000
-// bytes, git's own heuristic) are skipped automatically.
+// Files git treats as binary (a `binary`/`-diff` attribute, or a NUL byte in
+// the first 8,000 bytes of the staged blob) are skipped automatically.
 // Edit freely; keep each entry on its own line so diffs stay readable.
 // ---------------------------------------------------------------------------
 const IGNORE_PATTERNS = [
@@ -142,18 +142,73 @@ function stagedEntries() {
 }
 
 /**
+ * Staged `diff` attribute per path from .gitattributes (index version).
+ * "unset" (from `-diff` or the `binary` macro) means git treats the file as
+ * binary regardless of content; "set" or a driver name means text.
+ * Anything else is "unspecified" and falls back to the content probe.
+ */
+function stagedDiffAttrs(paths) {
+  const attrs = new Map();
+  if (paths.length === 0) return attrs;
+  const out = git(["check-attr", "--cached", "-z", "--stdin", "diff"], {
+    input: `${paths.join("\0")}\0`,
+  });
+  const tokens = out.split("\0");
+  for (let i = 0; i + 2 < tokens.length; i += 3) {
+    attrs.set(tokens[i], tokens[i + 2]);
+  }
+  return attrs;
+}
+
+/**
  * Git's binary heuristic: a NUL byte within the first 8,000 bytes of the blob.
  * Classifies the *staged blob itself* (by SHA) rather than the diff pair, so
- * replacing a tracked binary with oversized text is still caught, and no
- * path string is ever used as a lookup key.
+ * replacing a tracked binary with oversized text is still caught. Only the
+ * probe prefix is read; the child is terminated once enough bytes arrive.
  */
 const BINARY_PROBE_BYTES = 8000;
 function isBinaryBlob(sha) {
-  const buf = execFileSync("git", ["cat-file", "blob", sha], {
-    encoding: "buffer",
-    maxBuffer: 1024 * 1024 * 1024,
+  return new Promise((resolve, reject) => {
+    const child = spawn("git", ["cat-file", "blob", sha], {
+      // stderr is ignored: terminating the child early makes git report
+      // "unable to stream ... to stdout", which is expected here.
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+    let seen = 0;
+    let binary = false;
+    let settled = false;
+    const done = (value) => {
+      if (settled) return;
+      settled = true;
+      resolve(value);
+    };
+    child.stdout.on("data", (chunk) => {
+      if (settled) return;
+      const slice = chunk.subarray(0, Math.max(0, BINARY_PROBE_BYTES - seen));
+      seen += chunk.length;
+      if (slice.includes(0)) binary = true;
+      if (binary || seen >= BINARY_PROBE_BYTES) {
+        child.stdout.destroy();
+        child.kill();
+        done(binary);
+      }
+    });
+    child.on("error", (err) => {
+      if (!settled) {
+        settled = true;
+        reject(err);
+      }
+    });
+    child.on("close", () => done(binary));
   });
-  return buf.subarray(0, BINARY_PROBE_BYTES).includes(0);
+}
+
+/** True when git would treat the staged file as binary. */
+async function isStagedBinary(path, sha, attrs) {
+  const attr = attrs.get(path);
+  if (attr === "unset") return true;
+  if (attr === "set" || (attr && attr !== "unspecified")) return false;
+  return isBinaryBlob(sha);
 }
 
 /** Blob sizes for a list of SHAs in one `git cat-file --batch-check` call. */
@@ -170,17 +225,29 @@ function blobSizes(shas) {
   return sizes;
 }
 
-function main() {
+/** Render a path for the terminal with control characters escaped. */
+function displayPath(path) {
+  let out = "";
+  for (const ch of path) {
+    const code = ch.codePointAt(0);
+    const isControl = code < 0x20 || (code >= 0x7f && code <= 0x9f);
+    out += isControl ? `\\x${code.toString(16).padStart(2, "0")}` : ch;
+  }
+  return out;
+}
+
+async function main() {
   const candidates = stagedEntries().filter(({ path }) => !isIgnored(path));
   const sizes = blobSizes(candidates.map(({ sha }) => sha));
+  // Only files already over the limit need attribute / content inspection.
+  const large = candidates.filter(({ sha }) => (sizes.get(sha) ?? 0) > MAX_BYTES);
+  const attrs = stagedDiffAttrs(large.map(({ path }) => path));
   const offenders = [];
 
-  for (const { path, sha } of candidates) {
+  for (const { path, sha } of large) {
+    if (await isStagedBinary(path, sha, attrs)) continue;
     const bytes = sizes.get(sha) ?? 0;
-    // Only probe content for files that are over the limit anyway.
-    if (bytes > MAX_BYTES && !isBinaryBlob(sha)) {
-      offenders.push({ path, bytes, tokens: Math.ceil(bytes / BYTES_PER_TOKEN) });
-    }
+    offenders.push({ path, bytes, tokens: Math.ceil(bytes / BYTES_PER_TOKEN) });
   }
 
   if (offenders.length === 0) return 0;
@@ -193,7 +260,7 @@ function main() {
     "",
   ];
   for (const { path, bytes, tokens } of offenders) {
-    lines.push(`  • ${path}  ~${fmt(tokens)} tokens (${fmt(bytes)} bytes)`);
+    lines.push(`  • ${displayPath(path)}  ~${fmt(tokens)} tokens (${fmt(bytes)} bytes)`);
   }
   lines.push(
     "",
@@ -216,4 +283,4 @@ function main() {
   return 1;
 }
 
-process.exit(main());
+process.exit(await main());
