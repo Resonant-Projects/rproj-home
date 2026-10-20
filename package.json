@@ -11,7 +11,7 @@
     "format": "biome format --write .",
     "lint": "biome lint --write .",
     "prepare": "simple-git-hooks || true",
-    "check:file-tokens": "node scripts/check-file-tokens.mjs"
+    "check:file-tokens": "bun scripts/check-file-tokens.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
@@ -54,6 +54,6 @@
     "typescript": "^7.0.2"
   },
   "simple-git-hooks": {
-    "pre-commit": "if [ -f scripts/check-file-tokens.mjs ]; then node scripts/check-file-tokens.mjs; fi"
+    "pre-commit": "if [ -f scripts/check-file-tokens.mjs ]; then if command -v bun >/dev/null 2>&1; then bun scripts/check-file-tokens.mjs; else node scripts/check-file-tokens.mjs; fi; fi"
   }
 }

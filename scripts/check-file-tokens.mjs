@@ -3,8 +3,7 @@
 //
 // Tokens are estimated as bytes / 4, so the limit is MAX_TOKENS * 4 bytes
 // (20,000 bytes at the default 5,000 tokens). Only STAGED files are checked,
-// and the size measured is the staged blob (git cat-file -s :path), not the
-// working-tree file. Dependency-free; runs on Node or Bun.
+// and the size measured is the staged blob (by SHA), not the working-tree file. Dependency-free; runs on Node or Bun.
 //
 // Bypass in an emergency:   git commit --no-verify
 // Mark a path as generated: add a pattern to IGNORE_PATTERNS below.
@@ -19,7 +18,8 @@ const MAX_BYTES = MAX_TOKENS * BYTES_PER_TOKEN;
 // Ignore list. Glob-ish patterns matched against the repo-relative path:
 //   *   matches anything except "/"      **  matches anything including "/"
 //   A pattern without "/" matches the basename anywhere in the tree.
-// Files git already treats as binary are skipped automatically.
+// Staged blobs git would treat as binary (a NUL byte in the first 8,000
+// bytes, git's own heuristic) are skipped automatically.
 // Edit freely; keep each entry on its own line so diffs stay readable.
 // ---------------------------------------------------------------------------
 const IGNORE_PATTERNS = [
@@ -27,6 +27,7 @@ const IGNORE_PATTERNS = [
   "bun.lock",
   "bun.lockb",
   "package-lock.json",
+  "npm-shrinkwrap.json",
   "pnpm-lock.yaml",
   "yarn.lock",
   "Cargo.lock",
@@ -140,32 +141,19 @@ function stagedEntries() {
   return entries;
 }
 
-/** Paths git considers binary in the staged diff ("-\t-\t" in --numstat). */
-function stagedBinaryFiles() {
-  const out = git(["diff", "--cached", "--numstat", "-z", "--diff-filter=ACMRT"]);
-  const binary = new Set();
-  // -z output, one record per entry:
-  //   "added\tdeleted\tpath\0"                   for adds/modifies
-  //   "added\tdeleted\t\0old-path\0new-path\0"   for renames/copies
-  // Split on the first two tabs only so paths containing tabs survive.
-  const tokens = out.split("\0");
-  for (let i = 0; i < tokens.length; i++) {
-    const record = tokens[i];
-    if (!record) continue;
-    const t1 = record.indexOf("\t");
-    const t2 = record.indexOf("\t", t1 + 1);
-    if (t1 === -1 || t2 === -1) continue;
-    const added = record.slice(0, t1);
-    const deleted = record.slice(t1 + 1, t2);
-    let path = record.slice(t2 + 1);
-    if (path === "") {
-      // Rename/copy: skip the old path, take the new (staged) path.
-      path = tokens[i + 2] ?? "";
-      i += 2;
-    }
-    if (added === "-" && deleted === "-" && path) binary.add(path);
-  }
-  return binary;
+/**
+ * Git's binary heuristic: a NUL byte within the first 8,000 bytes of the blob.
+ * Classifies the *staged blob itself* (by SHA) rather than the diff pair, so
+ * replacing a tracked binary with oversized text is still caught, and no
+ * path string is ever used as a lookup key.
+ */
+const BINARY_PROBE_BYTES = 8000;
+function isBinaryBlob(sha) {
+  const buf = execFileSync("git", ["cat-file", "blob", sha], {
+    encoding: "buffer",
+    maxBuffer: 1024 * 1024 * 1024,
+  });
+  return buf.subarray(0, BINARY_PROBE_BYTES).includes(0);
 }
 
 /** Blob sizes for a list of SHAs in one `git cat-file --batch-check` call. */
@@ -183,14 +171,14 @@ function blobSizes(shas) {
 }
 
 function main() {
-  const binary = stagedBinaryFiles();
-  const candidates = stagedEntries().filter(({ path }) => !binary.has(path) && !isIgnored(path));
+  const candidates = stagedEntries().filter(({ path }) => !isIgnored(path));
   const sizes = blobSizes(candidates.map(({ sha }) => sha));
   const offenders = [];
 
   for (const { path, sha } of candidates) {
     const bytes = sizes.get(sha) ?? 0;
-    if (bytes > MAX_BYTES) {
+    // Only probe content for files that are over the limit anyway.
+    if (bytes > MAX_BYTES && !isBinaryBlob(sha)) {
       offenders.push({ path, bytes, tokens: Math.ceil(bytes / BYTES_PER_TOKEN) });
     }
   }
