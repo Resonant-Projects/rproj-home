@@ -105,8 +105,9 @@ function globToRegExp(pattern) {
     }
   }
   const anchored = pattern.includes("/") ? `^${src}$` : `(?:^|/)${src}$`;
-  // dotAll so "**" also spans line terminators inside unusual filenames.
-  return new RegExp(anchored, "s");
+  // dotAll so "**" also spans line terminators inside unusual filenames;
+  // case-insensitive so `map.SVG` is exempt like `map.svg`.
+  return new RegExp(anchored, "si");
 }
 
 const IGNORE_REGEXPS = IGNORE_PATTERNS.map(globToRegExp);
@@ -179,7 +180,12 @@ function stagedDiffAttrs(rawPaths) {
  * probe prefix is read; the child is terminated once enough bytes arrive.
  */
 const BINARY_PROBE_BYTES = 8000;
+const probeCache = new Map(); // sha -> Promise<boolean>; many paths can share one blob
 function isBinaryBlob(sha) {
+  if (!probeCache.has(sha)) probeCache.set(sha, probeBlob(sha));
+  return probeCache.get(sha);
+}
+function probeBlob(sha) {
   return new Promise((resolve, reject) => {
     const child = spawn("git", ["cat-file", "blob", sha], {
       // stderr is ignored: terminating the child early makes git report
@@ -317,4 +323,5 @@ async function main() {
   return 1;
 }
 
-process.exit(await main());
+// Set exitCode rather than calling process.exit() so stderr drains fully.
+process.exitCode = await main();
