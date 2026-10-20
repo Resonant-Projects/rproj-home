@@ -105,7 +105,8 @@ function globToRegExp(pattern) {
     }
   }
   const anchored = pattern.includes("/") ? `^${src}$` : `(?:^|/)${src}$`;
-  return new RegExp(anchored);
+  // dotAll so "**" also spans line terminators inside unusual filenames.
+  return new RegExp(anchored, "s");
 }
 
 const IGNORE_REGEXPS = IGNORE_PATTERNS.map(globToRegExp);
