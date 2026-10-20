@@ -92,10 +92,17 @@ function globToRegExp(pattern) {
       if (end === -1) {
         throw new Error(`Unclosed "{" in ignore pattern: ${pattern}`);
       }
+      // Brace alternations hold asset extensions; match those
+      // case-insensitively (map.SVG == map.svg) while every other part of a
+      // pattern stays case-sensitive (Public/ is not public/).
       const alts = pattern
         .slice(i + 1, end)
         .split(",")
-        .map((a) => a.replace(/[.+^$()|[\]\\]/g, "\\$&"));
+        .map((a) =>
+          a
+            .replace(/[a-z]/gi, (ch) => `[${ch.toLowerCase()}${ch.toUpperCase()}]`)
+            .replace(/[.+^$()|\\]/g, "\\$&"),
+        );
       src += `(?:${alts.join("|")})`;
       i = end;
     } else if (c === "?") {
@@ -105,9 +112,8 @@ function globToRegExp(pattern) {
     }
   }
   const anchored = pattern.includes("/") ? `^${src}$` : `(?:^|/)${src}$`;
-  // dotAll so "**" also spans line terminators inside unusual filenames;
-  // case-insensitive so `map.SVG` is exempt like `map.svg`.
-  return new RegExp(anchored, "si");
+  // dotAll so "**" also spans line terminators inside unusual filenames.
+  return new RegExp(anchored, "s");
 }
 
 const IGNORE_REGEXPS = IGNORE_PATTERNS.map(globToRegExp);
