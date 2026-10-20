@@ -88,6 +88,9 @@ function globToRegExp(pattern) {
       }
     } else if (c === "{") {
       const end = pattern.indexOf("}", i);
+      if (end === -1) {
+        throw new Error(`Unclosed "{" in ignore pattern: ${pattern}`);
+      }
       const alts = pattern
         .slice(i + 1, end)
         .split(",")
