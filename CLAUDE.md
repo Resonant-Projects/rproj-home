@@ -80,3 +80,7 @@ Mixed audience — developer peers exploring open-source work, potential clients
 3. **Invite, don't overwhelm** — Progressive disclosure and clear hierarchy. Visitors should feel welcomed and know exactly where to go, regardless of who they are.
 4. **Craft signals craft** — Attention to detail in the page itself demonstrates the quality of Keith's work. Micro-interactions, type choices, and color usage are the portfolio.
 5. **Audio DNA** — Subtle references to music and sound engineering (rhythm, frequency, waveform patterns) should be woven into the design language without making it a "music site."
+
+## File Size Limit
+
+A pre-commit hook (`scripts/check-file-tokens.mjs`, wired via `simple-git-hooks`) rejects any staged file over 5,000 tokens (bytes / 4, i.e. 20,000 bytes). Lockfiles, generated code, binaries, and `public/**` are exempt. Keep source files small: split by responsibility, move types/constants/helpers into their own files, and re-export from an index if needed. Do not bypass with `--no-verify` unless asked; add genuinely generated paths to `IGNORE_PATTERNS` in the script instead.

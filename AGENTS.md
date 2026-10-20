@@ -62,3 +62,7 @@ Uses `@/*` alias for imports from project root (configured in tsconfig.json).
 ## Environment Variables
 
 - `KIT_API_KEY`: Required for newsletter signup functionality (Kit/ConvertKit API)
+
+## File Size Limit
+
+A pre-commit hook (`scripts/check-file-tokens.mjs`, wired via `simple-git-hooks`) rejects any staged file over 5,000 tokens (bytes / 4, i.e. 20,000 bytes). Lockfiles, generated code, binaries, and `public/**` are exempt. Keep source files small: split by responsibility, move types/constants/helpers into their own files, and re-export from an index if needed. Do not bypass with `--no-verify` unless asked; add genuinely generated paths to `IGNORE_PATTERNS` in the script instead.

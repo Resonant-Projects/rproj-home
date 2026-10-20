@@ -73,3 +73,9 @@ Edit the following components to add your information:
 - **Icons**: Lucide React
 - **Fonts**: Geist Sans & Geist Mono
 - **TypeScript**: Full type safety
+
+## File Size Limit (pre-commit hook)
+
+A pre-commit hook blocks committing any staged file over **5,000 tokens** (estimated as bytes / 4, so 20,000 bytes). Lockfiles, generated code, binaries, minified files, snapshots, and `public/**` are exempt. The hook is installed automatically by `bun install` (via `simple-git-hooks`); run `bunx simple-git-hooks` to (re)install it manually.
+
+If a commit is blocked, split the file by responsibility (types, constants, helpers, sub-components into their own modules). Emergency bypass: `git commit --no-verify`. Genuinely generated paths go in `IGNORE_PATTERNS` in `scripts/check-file-tokens.mjs`.
