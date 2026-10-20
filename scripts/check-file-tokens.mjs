@@ -117,13 +117,29 @@ function stagedFiles() {
   return out.split("\0").filter(Boolean);
 }
 
-/** Paths git considers binary in the staged diff ("-\t-\tpath" in --numstat). */
+/** Paths git considers binary in the staged diff ("-\t-\t" in --numstat). */
 function stagedBinaryFiles() {
   const out = git(["diff", "--cached", "--numstat", "--diff-filter=ACMR", "-z"]);
   const binary = new Set();
-  // -z output: "added\tdeleted\tpath\0" (renames add an extra NUL-separated path).
-  for (const entry of out.split("\0")) {
-    const [added, deleted, path] = entry.split("\t");
+  // -z output, one record per entry:
+  //   "added\tdeleted\tpath\0"                   for adds/modifies
+  //   "added\tdeleted\t\0old-path\0new-path\0"   for renames/copies
+  // Split on the first two tabs only so paths containing tabs survive.
+  const tokens = out.split("\0");
+  for (let i = 0; i < tokens.length; i++) {
+    const record = tokens[i];
+    if (!record) continue;
+    const t1 = record.indexOf("\t");
+    const t2 = record.indexOf("\t", t1 + 1);
+    if (t1 === -1 || t2 === -1) continue;
+    const added = record.slice(0, t1);
+    const deleted = record.slice(t1 + 1, t2);
+    let path = record.slice(t2 + 1);
+    if (path === "") {
+      // Rename/copy: skip the old path, take the new (staged) path.
+      path = tokens[i + 2] ?? "";
+      i += 2;
+    }
     if (added === "-" && deleted === "-" && path) binary.add(path);
   }
   return binary;
