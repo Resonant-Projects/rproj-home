@@ -116,17 +116,20 @@ function git(args, opts = {}) {
 }
 
 /**
- * Staged entries as { path, sha } from `git diff --cached --raw -z`.
- * Sizes are looked up by blob SHA so the (decoded) path is only ever used
- * for display and ignore matching; it is never passed back to git, which
- * keeps the hook safe for filenames git stores as non-UTF-8 bytes.
+ * Staged entries as { path, rawPath, sha } from `git diff --cached --raw -z`.
+ * Output is decoded as latin1 so every pathname byte survives 1:1 in
+ * `rawPath`; `path` is the UTF-8 rendering used only for ignore matching and
+ * display. Sizes are looked up by blob SHA and attributes by `rawPath`, so a
+ * lossy decoded string is never handed back to git.
  *
  * -z output, one record per entry:
  *   ":oldmode newmode oldsha newsha S\0path\0"            for A/C/M/T
  *   ":oldmode newmode oldsha newsha Rnnn\0old\0new\0"     for renames/copies
  */
 function stagedEntries() {
-  const out = git(["diff", "--cached", "--raw", "-z", "--no-abbrev", "--diff-filter=ACMRT"]);
+  const out = git(["diff", "--cached", "--raw", "-z", "--no-abbrev", "--diff-filter=ACMRT"], {
+    encoding: "latin1",
+  });
   const tokens = out.split("\0");
   const entries = [];
   for (let i = 0; i < tokens.length; i++) {
@@ -134,24 +137,29 @@ function stagedEntries() {
     if (!meta.startsWith(":")) continue;
     const [, , , sha, status] = meta.split(" ");
     // Renames/copies carry two paths; the second is the staged path.
-    const path = status.startsWith("R") || status.startsWith("C") ? tokens[i + 2] : tokens[i + 1];
-    i += status.startsWith("R") || status.startsWith("C") ? 2 : 1;
-    if (path) entries.push({ path, sha });
+    const isPair = status.startsWith("R") || status.startsWith("C");
+    const rawPath = isPair ? tokens[i + 2] : tokens[i + 1];
+    i += isPair ? 2 : 1;
+    if (rawPath) {
+      entries.push({ rawPath, path: Buffer.from(rawPath, "latin1").toString("utf8"), sha });
+    }
   }
   return entries;
 }
 
 /**
- * Staged `diff` attribute per path from .gitattributes (index version).
+ * Staged `diff` attribute per raw path from .gitattributes (index version).
  * "unset" (from `-diff` or the `binary` macro) means git treats the file as
  * binary regardless of content; "set" or a driver name means text.
  * Anything else is "unspecified" and falls back to the content probe.
  */
-function stagedDiffAttrs(paths) {
+function stagedDiffAttrs(rawPaths) {
   const attrs = new Map();
-  if (paths.length === 0) return attrs;
+  if (rawPaths.length === 0) return attrs;
+  // Byte-exact round trip: latin1 in, latin1 out.
   const out = git(["check-attr", "--cached", "-z", "--stdin", "diff"], {
-    input: `${paths.join("\0")}\0`,
+    input: Buffer.from(`${rawPaths.join("\0")}\0`, "latin1"),
+    encoding: "latin1",
   });
   const tokens = out.split("\0");
   for (let i = 0; i + 2 < tokens.length; i += 3) {
@@ -204,8 +212,8 @@ function isBinaryBlob(sha) {
 }
 
 /** True when git would treat the staged file as binary. */
-async function isStagedBinary(path, sha, attrs) {
-  const attr = attrs.get(path);
+async function isStagedBinary(rawPath, sha, attrs) {
+  const attr = attrs.get(rawPath);
   if (attr === "unset") return true;
   if (attr === "set" || (attr && attr !== "unspecified")) return false;
   return isBinaryBlob(sha);
@@ -241,11 +249,11 @@ async function main() {
   const sizes = blobSizes(candidates.map(({ sha }) => sha));
   // Only files already over the limit need attribute / content inspection.
   const large = candidates.filter(({ sha }) => (sizes.get(sha) ?? 0) > MAX_BYTES);
-  const attrs = stagedDiffAttrs(large.map(({ path }) => path));
+  const attrs = stagedDiffAttrs(large.map(({ rawPath }) => rawPath));
   const offenders = [];
 
-  for (const { path, sha } of large) {
-    if (await isStagedBinary(path, sha, attrs)) continue;
+  for (const { path, rawPath, sha } of large) {
+    if (await isStagedBinary(rawPath, sha, attrs)) continue;
     const bytes = sizes.get(sha) ?? 0;
     offenders.push({ path, bytes, tokens: Math.ceil(bytes / BYTES_PER_TOKEN) });
   }
