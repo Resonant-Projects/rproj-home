@@ -211,11 +211,27 @@ function isBinaryBlob(sha) {
   });
 }
 
+/** Whether a custom diff driver (`diff=<name>`) is configured `binary = true`. */
+const driverBinaryCache = new Map();
+function isBinaryDiffDriver(name) {
+  if (!driverBinaryCache.has(name)) {
+    let value = "";
+    try {
+      value = git(["config", "--type=bool", "--get", `diff.${name}.binary`]).trim();
+    } catch {
+      // Unset or invalid: git treats the driver as text.
+    }
+    driverBinaryCache.set(name, value === "true");
+  }
+  return driverBinaryCache.get(name);
+}
+
 /** True when git would treat the staged file as binary. */
 async function isStagedBinary(rawPath, sha, attrs) {
   const attr = attrs.get(rawPath);
-  if (attr === "unset") return true;
-  if (attr === "set" || (attr && attr !== "unspecified")) return false;
+  if (attr === "unset") return true; // `binary` / `-diff`
+  if (attr === "set") return false; // forced text
+  if (attr && attr !== "unspecified") return isBinaryDiffDriver(attr); // diff=<driver>
   return isBinaryBlob(sha);
 }
 
