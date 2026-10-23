@@ -2,6 +2,10 @@
 
 This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
+## Scope discipline
+
+- Before adding complexity for a speculative or vanishingly unlikely race or security edge case, explain the concrete failure mode, likelihood, and complexity cost to the user and get their buy-in. Do not silently expand scope for theoretical robustness.
+
 ## Project Overview
 
 A personal link tree website built with Next.js 16 (App Router) for Keith Elliott, featuring a custom brand color palette and responsive design.
