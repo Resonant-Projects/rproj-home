@@ -82,7 +82,9 @@ export function NewsletterSignup() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
-              <label htmlFor="newsletter-email" className="sr-only">Email address</label>
+              <label htmlFor="newsletter-email" className="sr-only">
+                Email address
+              </label>
               <Input
                 id="newsletter-email"
                 type="email"
@@ -95,7 +97,15 @@ export function NewsletterSignup() {
               />
             </div>
 
-            {error && <p id="newsletter-error" role="alert" className="text-sm text-destructive text-center">{error}</p>}
+            {error && (
+              <p
+                id="newsletter-error"
+                role="alert"
+                className="text-sm text-destructive text-center"
+              >
+                {error}
+              </p>
+            )}
 
             <Button
               type="submit"
