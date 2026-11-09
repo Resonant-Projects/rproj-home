@@ -1,0 +1,6 @@
+# Supply-chain gate: bun refuses to resolve any package version (direct or
+# transitive) published less than 24 hours ago. Do not lower this value.
+# `bun install --frozen-lockfile` (CI, Vercel) is unaffected because it never
+# re-resolves; the gate applies whenever bun picks a new version.
+[install]
+minimumReleaseAge = 86400 # seconds (24 hours)
