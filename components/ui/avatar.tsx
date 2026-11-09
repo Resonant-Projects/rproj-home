@@ -35,4 +35,4 @@ function AvatarFallback({ className, ...props }: React.ComponentProps<typeof Bas
   );
 }
 
-export { Avatar, AvatarImage, AvatarFallback };
+export { Avatar, AvatarFallback, AvatarImage };
