@@ -1,6 +1,78 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  "description": [
+    "Supply-chain policy: every direct dependency is pinned to an exact version, and no version is proposed until it is at least 3 days old (internalChecksFilter strict: no branch is created before then).",
+    "Automerge is OFF everywhere. main has no required status check, so an automerged PR would merge untested. Patch automerge may be enabled only after a required check (the 'verify' CI job and/or 'Vercel') is enforced on main.",
+    "bunfig.toml sets [install] minimumReleaseAge = 86400 so transitive versions bun resolves while updating bun.lock are also at least 24 hours old."
+  ],
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "timezone": "America/New_York",
+  "rangeStrategy": "pin",
+  "separateMinorPatch": true,
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  "automerge": false,
+  "platformAutomerge": false,
+  "lockFileMaintenance": {
+    "description": "Disabled: lock-file maintenance re-resolves the whole tree in one PR.",
+    "enabled": false
+  },
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "description": "Security PRs open outside the weekly schedule but are never automerged and still respect the 3-day release age.",
+    "automerge": false,
+    "minimumReleaseAge": "3 days",
+    "labels": ["security"]
+  },
+  "packageRules": [
+    {
+      "description": "Patch updates open individually. Automerge stays off until main has a required status check.",
+      "matchUpdateTypes": ["patch"],
+      "automerge": false
+    },
+    {
+      "description": "Minor updates are batched into one weekly PR.",
+      "matchUpdateTypes": ["minor"],
+      "groupName": "weekly minor updates",
+      "schedule": ["before 6am on monday"],
+      "automerge": false
+    },
+    {
+      "description": "Major updates are batched weekly and always need a manual review.",
+      "matchUpdateTypes": ["major"],
+      "groupName": "weekly major updates",
+      "schedule": ["before 6am on monday"],
+      "automerge": false
+    },
+    {
+      "description": "react, react-dom and their type packages move together so they never drift apart.",
+      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"],
+      "groupName": "React",
+      "automerge": false
+    },
+    {
+      "description": "Next.js and its companion packages move together.",
+      "matchPackageNames": ["next", "@next/**", "eslint-config-next"],
+      "groupName": "Next.js",
+      "automerge": false
+    },
+    {
+      "description": "GitHub Actions stay pinned to commit SHAs and update in one weekly PR.",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "schedule": ["before 6am on monday"],
+      "automerge": false
+    },
+    {
+      "description": "No package-replacement PRs (e.g. framer-motion -> motion): they carry no release timestamp, so they bypass minimumReleaseAge, and they need code changes. Do these migrations by hand.",
+      "matchUpdateTypes": ["replacement"],
+      "enabled": false
+    },
+    {
+      "description": "Never automerge 0.x packages: any 0.x update may be breaking.",
+      "matchDatasources": ["npm"],
+      "matchCurrentVersion": "<1.0.0",
+      "automerge": false
+    }
   ]
 }
