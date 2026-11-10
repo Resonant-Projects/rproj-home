@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  verify:
+    # This job's check name is "verify". Make it a required status check on main.
+    name: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Bun and Biome find their config implicitly and silently fall back to
+      # defaults when it is missing. Fail loudly instead.
+      - name: Require supply-chain and lint config
+        run: |
+          set -euo pipefail
+          for f in bunfig.toml biome.json renovate.json bun.lock; do
+            if [ ! -s "$f" ]; then
+              echo "::error file=$f::Required file $f is missing or empty"
+              exit 1
+            fi
+          done
+          age=$(awk '
+            /^[[:space:]]*\[/ { in_install = ($0 ~ /^[[:space:]]*\[install\][[:space:]]*(#.*)?$/) }
+            in_install && /^[[:space:]]*minimumReleaseAge[[:space:]]*=/ {
+              sub(/^[^=]*=[[:space:]]*/, ""); sub(/[[:space:]]*(#.*)?$/, ""); print; exit
+            }' bunfig.toml)
+          if ! [[ "$age" =~ ^[0-9]+$ ]] || [ "$age" -lt 86400 ]; then
+            echo "::error file=bunfig.toml::[install] minimumReleaseAge must be an integer >= 86400 (got '${age}')"
+            exit 1
+          fi
+          echo "bunfig.toml [install] minimumReleaseAge = $age"
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: 1.4.4
+          no-cache: true
+
+      - name: Install (frozen lockfile)
+        run: bun install --frozen-lockfile
+
+      - name: Biome check
+        run: bunx biome check --config-path=./biome.json .
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Build
+        run: bun run build
